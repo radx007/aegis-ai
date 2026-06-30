@@ -1,0 +1,66 @@
+# ==============================================================================
+# 1. Python Bytecode & Cache Artifacts
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.black_cache/
+.coverage
+htmlcov/
+.nox/
+.tox/
+
+# ==============================================================================
+# 2. Virtual Environments 
+# ==============================================================================
+.venv/
+venv/
+ENV/
+env/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.eggs/
+
+# ==============================================================================
+# 3. Security & Environment Configuration
+# ==============================================================================
+.env
+.env.local
+.env.*.local
+*.secret
+*.pem
+*.key
+
+# ==============================================================================
+# 4. OS & IDE Specific Files
+# ==============================================================================
+# macOS system files
+.DS_Store
+Thumbs.db
+
+# JetBrains IDEs (PyCharm)
+.idea/
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# ==============================================================================
+# 5. Build & Distribution Artifacts
+# ==============================================================================
+build/
+develop-eggs/
+dist/
+downloads/
