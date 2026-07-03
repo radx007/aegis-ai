@@ -1,1 +1,1 @@
-Samma3: The ear that never sleeps.
+Aegis: The ear that never sleeps.
