@@ -2,6 +2,7 @@ from pathlib import Path
 
 import joblib
 
+from src.config import settings
 from src.embeddings import (
     EmbeddingExtractor
 )
@@ -11,19 +12,8 @@ class Predictor:
 
     def __init__(self):
 
-        root = (
-            Path(__file__)
-            .resolve()
-            .parents[2]
-        )
-
         self.model = joblib.load(
-
-            root /
-
-            "models" /
-
-            "baseline.pkl"
+            settings.baseline_model_path
         )
 
         self.extractor = (

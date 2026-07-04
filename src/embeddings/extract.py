@@ -4,13 +4,15 @@ import librosa
 import numpy as np
 import tensorflow_hub as hub
 
+from src.config import settings
+
 
 class EmbeddingExtractor:
 
     def __init__(self):
 
         self.model = hub.load(
-            "https://tfhub.dev/google/yamnet/1"
+            settings.yamnet_url
         )
 
     def extract(
@@ -20,7 +22,7 @@ class EmbeddingExtractor:
 
         waveform, sr = librosa.load(
             audio_path,
-            sr=16000
+            sr= settings.sample_rate
         )
 
         waveform = waveform.astype(

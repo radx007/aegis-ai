@@ -15,22 +15,18 @@ from sklearn.metrics import (
     accuracy_score
 )
 
+from src.config import settings
 
 class Trainer:
 
     def __init__(self):
 
-        root = Path(__file__).resolve().parents[2]
-
         self.data = (
-            root /
-            "data" /
-            "processed"
+            settings.processed_data_path
         )
 
         self.models = (
-            root /
-            "models"
+            settings.models_path
         )
 
         self.models.mkdir(
@@ -92,8 +88,7 @@ class Trainer:
         )
 
         path = (
-            self.models /
-            "baseline.pkl"
+            settings.baseline_model_path
         )
 
         joblib.dump(
