@@ -19,6 +19,8 @@ from src.config import settings
 
 from src.dataset import Dataset
 
+from src.evaluation import Evaluator
+
 class Trainer:
 
     def __init__(self):
@@ -61,9 +63,11 @@ class Trainer:
             X_test
         )
 
-        acc = accuracy_score(
+        evaluator = Evaluator()
+
+        metrics = evaluator.evaluate(
             y_test,
-            pred
+            pred,
         )
 
         path = (
@@ -77,8 +81,7 @@ class Trainer:
 
         return {
 
-            "accuracy": acc,
-
+            **metrics,
             "path": str(
                 path
             )
