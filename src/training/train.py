@@ -1,18 +1,5 @@
-from pathlib import Path
-
-import joblib
-import numpy as np
-
 from sklearn.linear_model import (
     LogisticRegression
-)
-
-from sklearn.model_selection import (
-    train_test_split
-)
-
-from sklearn.metrics import (
-    accuracy_score
 )
 
 from src.config import settings
@@ -20,6 +7,8 @@ from src.config import settings
 from src.dataset import Dataset
 
 from src.evaluation import Evaluator
+
+from src.models import ModelRepository
 
 class Trainer:
 
@@ -70,13 +59,10 @@ class Trainer:
             pred,
         )
 
-        path = (
-            settings.baseline_model_path
-        )
+        repository = ModelRepository()
 
-        joblib.dump(
-            model,
-            path
+        path = repository.save(
+            model
         )
 
         return {

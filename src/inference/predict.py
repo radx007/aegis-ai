@@ -1,20 +1,17 @@
-from pathlib import Path
 
-import joblib
-
-from src.config import settings
 from src.embeddings import (
     EmbeddingExtractor
 )
+from src.models import ModelRepository
 
 
 class Predictor:
 
     def __init__(self):
 
-        self.model = joblib.load(
-            settings.baseline_model_path
-        )
+        repository = ModelRepository()
+
+        self.model = repository.load()
 
         self.extractor = (
             EmbeddingExtractor()
