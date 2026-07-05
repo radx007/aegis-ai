@@ -6,6 +6,8 @@ from src.config import settings
 
 from src.dataset import Dataset
 
+from src.entities import TrainingResult
+
 from src.evaluation import Evaluator
 
 from src.models import ModelRepository
@@ -65,10 +67,7 @@ class Trainer:
             model
         )
 
-        return {
-
-            **metrics,
-            "path": str(
-                path
-            )
-        }
+        return TrainingResult(
+            metrics=metrics,
+            model_path=path,
+        )

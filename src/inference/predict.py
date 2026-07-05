@@ -2,6 +2,7 @@
 from src.embeddings import (
     EmbeddingExtractor
 )
+from src.entities import PredictionResult
 from src.models import ModelRepository
 
 
@@ -47,11 +48,7 @@ class Predictor:
             probs.max()
         )
 
-        return {
-
-            "label": label,
-
-            "confidence": float(
-                confidence
-            )
-        }
+        return PredictionResult(
+            label=label,
+            confidence=float(confidence),
+        )
