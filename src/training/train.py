@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from sklearn.linear_model import (
     LogisticRegression
 )
@@ -14,13 +16,13 @@ from src.models import ModelRepository
 
 class Trainer:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
-        self.data = (
+        self.data: Path = (
             settings.processed_data_path
         )
 
-        self.models = (
+        self.models: Path = (
             settings.models_path
         )
 
@@ -28,7 +30,7 @@ class Trainer:
             exist_ok=True
         )
 
-    def train(self):
+    def train(self) -> TrainingResult:
 
         dataset = Dataset()
 

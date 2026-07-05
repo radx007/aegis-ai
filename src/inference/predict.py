@@ -1,50 +1,59 @@
 
+from pathlib import Path
+from typing import Protocol, cast
+
+import numpy as np
+
 from src.embeddings import (
     EmbeddingExtractor
 )
 from src.entities import PredictionResult
 from src.models import ModelRepository
 
+from pathlib import Path
 
 class Predictor:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         repository = ModelRepository()
 
         self.model = repository.load()
 
-        self.extractor = (
+        self.extractor: EmbeddingExtractor = (
             EmbeddingExtractor()
         )
 
     def predict(
         self,
-        audio_path
-    ):
+        audio_path: Path,
+    ) -> PredictionResult:
 
-        emb = (
+        emb: np.ndarray = (
             self.extractor
             .extract(
                 audio_path
             )
         )
 
-        probs = (
+        probs: np.ndarray = (
             self.model
             .predict_proba(
-                [emb]
+                np.expand_dims(
+                    emb,
+                    axis=0,
+                )
             )[0]
         )
 
-        label = (
+        label = str(
             self.model
             .classes_[
-                probs.argmax()
+                int(probs.argmax())
             ]
         )
 
-        confidence = (
+        confidence: float = (
             probs.max()
         )
 

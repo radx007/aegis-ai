@@ -7,7 +7,7 @@ from src.config import settings
 
 class Dataset:
 
-    def load(self):
+    def load(self) -> tuple[np.ndarray, np.ndarray]:
 
         X = np.load(
             settings.processed_data_path / "X.npy"
@@ -23,7 +23,7 @@ class Dataset:
         self,
         test_size: float = 0.2,
         random_state: int = 42,
-    ):
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 
         X, y = self.load()
 

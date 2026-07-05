@@ -1,3 +1,4 @@
+import numpy as np
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -13,9 +14,9 @@ class Evaluator:
 
     def evaluate(
         self,
-        y_true,
-        y_pred,
-    ):
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+    ) -> EvaluationMetrics:
         return EvaluationMetrics(
             accuracy= accuracy_score(
                 y_true,

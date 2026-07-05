@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Protocol
 
 import librosa
 import numpy as np
@@ -7,31 +8,39 @@ import tensorflow_hub as hub
 from src.config import settings
 
 
+class _YamnetModel(Protocol):
+
+    def __call__(
+        self,
+        waveform: np.ndarray,
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]: ...
+
+
 class EmbeddingExtractor:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
-        self.model = hub.load(
+        self.model: _YamnetModel = hub.load(
             settings.yamnet_url
         )
 
     def extract(
         self,
-        audio_path
-    ):
+        audio_path: Path,
+    ) -> np.ndarray:
 
-        waveform, sr = librosa.load(
+        waveform, _sr = librosa.load(
             audio_path,
-            sr= settings.sample_rate
+            sr=settings.sample_rate,
         )
 
         waveform = waveform.astype(
             np.float32
         )
 
-        scores,\
-        embeddings,\
-        spec = self.model(
+        _scores, \
+        embeddings, \
+        _spec = self.model(
             waveform
         )
 
