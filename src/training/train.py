@@ -17,6 +17,8 @@ from sklearn.metrics import (
 
 from src.config import settings
 
+from src.dataset import Dataset
+
 class Trainer:
 
     def __init__(self):
@@ -33,39 +35,16 @@ class Trainer:
             exist_ok=True
         )
 
-    def load_data(self):
-
-        X = np.load(
-            self.data /
-            "X.npy"
-        )
-
-        y = np.load(
-            self.data /
-            "y.npy"
-        )
-
-        return X, y
-
     def train(self):
 
-        X, y = self.load_data()
+        dataset = Dataset()
 
         (
             X_train,
             X_test,
             y_train,
-            y_test
-
-        ) = train_test_split(
-
-            X,
-            y,
-
-            test_size=0.2,
-
-            random_state=42
-        )
+            y_test,
+        ) = dataset.split()
 
         model = (
             LogisticRegression(
