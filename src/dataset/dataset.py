@@ -4,6 +4,8 @@ import numpy as np
 
 from src.config import settings
 
+from src.logging import logger
+
 
 class Dataset:
 
@@ -25,7 +27,15 @@ class Dataset:
         random_state: int = 42,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 
+        logger.info(
+            "Loading processed dataset."
+        )
+
         X, y = self.load()
+
+        logger.success(
+            f"Loaded {len(X)} samples."
+        )
 
         return train_test_split(
             X,

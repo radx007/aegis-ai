@@ -7,10 +7,13 @@ import numpy as np
 from src.embeddings import (
     EmbeddingExtractor
 )
+
 from src.entities import PredictionResult
 from src.models import ModelRepository
 
 from pathlib import Path
+
+from src.logging import logger
 
 class Predictor:
 
@@ -28,6 +31,10 @@ class Predictor:
         self,
         audio_path: Path,
     ) -> PredictionResult:
+        
+        logger.info(
+            f"Predicting {audio_path.name}"
+        )
 
         emb: np.ndarray = (
             self.extractor
@@ -55,6 +62,10 @@ class Predictor:
 
         confidence: float = (
             probs.max()
+        )
+
+        logger.success(
+            f"{label} ({confidence:.2%})"
         )
 
         return PredictionResult(

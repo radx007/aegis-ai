@@ -14,6 +14,8 @@ from src.evaluation import Evaluator
 
 from src.models import ModelRepository
 
+from src.logging import logger
+
 class Trainer:
 
     def __init__(self) -> None:
@@ -31,6 +33,8 @@ class Trainer:
         )
 
     def train(self) -> TrainingResult:
+
+        logger.info("Starting model training.")
 
         dataset = Dataset()
 
@@ -52,6 +56,8 @@ class Trainer:
             y_train
         )
 
+        logger.success("Model trained successfully.")
+
         pred = model.predict(
             X_test
         )
@@ -65,8 +71,14 @@ class Trainer:
 
         repository = ModelRepository()
 
+        logger.info("Saving model...")
+
         path = repository.save(
             model
+        )
+
+        logger.success(
+            f"Model saved to {path}"
         )
 
         return TrainingResult(

@@ -7,6 +7,7 @@ import tensorflow_hub as hub
 
 from src.config import settings
 
+from src.logging import logger
 
 class _YamnetModel(Protocol):
 
@@ -28,6 +29,10 @@ class EmbeddingExtractor:
         self,
         audio_path: Path,
     ) -> np.ndarray:
+        
+        logger.info(
+            f"Extracting embeddings from {audio_path.name}"
+        )
 
         waveform, _sr = librosa.load(
             audio_path,

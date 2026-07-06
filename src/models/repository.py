@@ -6,7 +6,7 @@ from src.config import settings
 
 from sklearn.base import ClassifierMixin
 
-
+from src.logging import logger
 
 class ModelRepository:
 
@@ -14,6 +14,8 @@ class ModelRepository:
         self,
         model: ClassifierMixin,
     )-> Path:
+        
+        logger.info("Saving model.")
 
         joblib.dump(
             model,
@@ -23,6 +25,8 @@ class ModelRepository:
         return settings.baseline_model_path
 
     def load(self) -> ClassifierMixin:
+
+        logger.info("Loading model.")
 
         return joblib.load(
             settings.baseline_model_path
