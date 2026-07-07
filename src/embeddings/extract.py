@@ -49,6 +49,10 @@ class EmbeddingExtractor:
             waveform
         )
 
+        logger.success(
+            f"Extracted embeddings from {audio_path.name}"
+        )
+
         return (
             embeddings
             .numpy()

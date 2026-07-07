@@ -5,7 +5,7 @@ from pydantic_settings import (
 )
 
 
-ROOT = (
+_ROOT = (
     Path(__file__)
     .resolve()
     .parents[2]
@@ -18,14 +18,16 @@ class Settings(
 
     sample_rate: int = 16000
 
-    data_path: Path = ROOT / "data"
+    root_path: Path = _ROOT
 
-    models_path: Path = ROOT / "models"
+    data_path: Path = _ROOT / "data"
 
-    processed_data_path: Path = ROOT / "data" / "processed"
+    models_path: Path = _ROOT / "models"
+
+    processed_data_path: Path = _ROOT / "data" / "processed"
 
     baseline_model_path: Path = (
-        ROOT / "models" / "baseline.pkl"
+        _ROOT / "models" / "baseline.pkl"
     )
 
     yamnet_url: str = (
