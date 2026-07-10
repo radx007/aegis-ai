@@ -5,6 +5,7 @@ from sklearn.linear_model import (
 )
 
 from src.config import settings
+from src.exceptions import TrainingError
 
 from src.dataset import Dataset
 
@@ -33,7 +34,6 @@ class Trainer:
         )
 
     def train(self) -> TrainingResult:
-
         logger.info("Starting model training.")
 
         dataset = Dataset()
@@ -51,23 +51,33 @@ class Trainer:
             )
         )
 
-        model.fit(
-            X_train,
-            y_train
-        )
+        try:
 
-        logger.success("Model trained successfully.")
+            model.fit(
+                X_train,
+                y_train
+            )
 
-        pred = model.predict(
-            X_test
-        )
+            logger.success("Model trained successfully.")
 
-        evaluator = Evaluator()
+            pred = model.predict(
+                X_test
+            )
 
-        metrics = evaluator.evaluate(
-            y_test,
-            pred,
-        )
+            evaluator = Evaluator()
+
+            metrics = evaluator.evaluate(
+                y_test,
+                pred,
+            )
+
+        except Exception as exc:
+
+            logger.exception("Failed to train model.")
+
+            raise TrainingError(
+                "Unable to train model."
+            ) from exc
 
         repository = ModelRepository()
 

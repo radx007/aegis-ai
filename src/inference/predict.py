@@ -4,6 +4,8 @@ from typing import Protocol, cast
 
 import numpy as np
 
+from src.exceptions import PredictionError
+
 from src.embeddings import (
     EmbeddingExtractor
 )
@@ -15,10 +17,10 @@ from pathlib import Path
 
 from src.logging import logger
 
+
 class Predictor:
 
     def __init__(self) -> None:
-
         repository = ModelRepository()
 
         self.model = repository.load()
@@ -31,7 +33,6 @@ class Predictor:
         self,
         audio_path: Path,
     ) -> PredictionResult:
-        
         logger.info(
             f"Predicting {audio_path.name}"
         )
@@ -43,26 +44,38 @@ class Predictor:
             )
         )
 
-        probs: np.ndarray = (
-            self.model
-            .predict_proba(
-                np.expand_dims(
-                    emb,
-                    axis=0,
-                )
-            )[0]
-        )
+        try:
 
-        label = str(
-            self.model
-            .classes_[
-                int(probs.argmax())
-            ]
-        )
+            probs: np.ndarray = (
+                self.model
+                .predict_proba(
+                    np.expand_dims(
+                        emb,
+                        axis=0,
+                    )
+                )[0]
+            )
 
-        confidence: float = (
-            probs.max()
-        )
+            label = str(
+                self.model
+                .classes_[
+                    int(probs.argmax())
+                ]
+            )
+
+            confidence: float = (
+                probs.max()
+            )
+
+        except Exception as exc:
+
+            logger.exception(
+                f"Failed to predict {audio_path.name}."
+            )
+
+            raise PredictionError(
+                "Unable to make prediction."
+            ) from exc
 
         logger.success(
             f"{label} ({confidence:.2%})"

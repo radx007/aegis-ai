@@ -3,10 +3,12 @@ from pathlib import Path
 import joblib
 
 from src.config import settings
+from src.exceptions import ModelError
 
 from sklearn.base import ClassifierMixin
 
 from src.logging import logger
+
 
 class ModelRepository:
 
@@ -14,20 +16,38 @@ class ModelRepository:
         self,
         model: ClassifierMixin,
     )-> Path:
-        
-        logger.info("Saving model.")
+        try:
 
-        joblib.dump(
-            model,
-            settings.baseline_model_path,
-        )
+            logger.info("Saving model.")
 
-        return settings.baseline_model_path
+            joblib.dump(
+                model,
+                settings.baseline_model_path,
+            )
+
+            return settings.baseline_model_path
+
+        except Exception as exc:
+
+            logger.exception("Failed to save model.")
+
+            raise ModelError(
+                "Unable to save model."
+            ) from exc
 
     def load(self) -> ClassifierMixin:
+        try:
 
-        logger.info("Loading model.")
+            logger.info("Loading model.")
 
-        return joblib.load(
-            settings.baseline_model_path
-        )
+            return joblib.load(
+                settings.baseline_model_path
+            )
+
+        except Exception as exc:
+
+            logger.exception("Failed to load model.")
+
+            raise ModelError(
+                "Unable to load model."
+            ) from exc
