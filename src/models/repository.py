@@ -12,6 +12,9 @@ from src.logging import logger
 
 class ModelRepository:
 
+    def __init__(self) -> None:
+        self._model_path = settings.baseline_model_path
+
     def save(
         self,
         model: ClassifierMixin,
@@ -22,10 +25,10 @@ class ModelRepository:
 
             joblib.dump(
                 model,
-                settings.baseline_model_path,
+                self._model_path,
             )
 
-            return settings.baseline_model_path
+            return self._model_path
 
         except Exception as exc:
 
@@ -41,7 +44,7 @@ class ModelRepository:
             logger.info("Loading model.")
 
             return joblib.load(
-                settings.baseline_model_path
+                self._model_path
             )
 
         except Exception as exc:

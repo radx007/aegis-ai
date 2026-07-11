@@ -1,97 +1,78 @@
-from pathlib import Path
-
-from sklearn.linear_model import (
-    LogisticRegression
-)
-
-from src.config import settings
-from src.exceptions import TrainingError
+from sklearn.linear_model import LogisticRegression
 
 from src.dataset import Dataset
-
 from src.entities import TrainingResult
-
 from src.evaluation import Evaluator
-
+from src.exceptions import TrainingError
+from src.logging import logger
 from src.models import ModelRepository
 
-from src.logging import logger
 
 class Trainer:
 
-    def __init__(self) -> None:
-
-        self.data: Path = (
-            settings.processed_data_path
-        )
-
-        self.models: Path = (
-            settings.models_path
-        )
-
-        self.models.mkdir(
-            exist_ok=True
-        )
+    def __init__(
+        self,
+        dataset: Dataset,
+        evaluator: Evaluator,
+        repository: ModelRepository,
+    ) -> None:
+        self._dataset = dataset
+        self._evaluator = evaluator
+        self._repository = repository
 
     def train(self) -> TrainingResult:
         logger.info("Starting model training.")
-
-        dataset = Dataset()
 
         (
             X_train,
             X_test,
             y_train,
             y_test,
-        ) = dataset.split()
+        ) = self._dataset.split()
 
-        model = (
-            LogisticRegression(
-                max_iter=1000
-            )
+        model = LogisticRegression(
+            max_iter=1000
         )
 
         try:
-
             model.fit(
                 X_train,
-                y_train
+                y_train,
             )
 
-            logger.success("Model trained successfully.")
+            logger.success(
+                "Model trained successfully."
+            )
 
-            pred = model.predict(
+            predictions = model.predict(
                 X_test
             )
 
-            evaluator = Evaluator()
-
-            metrics = evaluator.evaluate(
+            metrics = self._evaluator.evaluate(
                 y_test,
-                pred,
+                predictions,
             )
 
         except Exception as exc:
-
-            logger.exception("Failed to train model.")
+            logger.exception(
+                "Failed to train model."
+            )
 
             raise TrainingError(
                 "Unable to train model."
             ) from exc
 
-        repository = ModelRepository()
-
         logger.info("Saving model...")
 
-        path = repository.save(
+        model_path = self._repository.save(
             model
         )
 
         logger.success(
-            f"Model saved to {path}"
+            f"Model saved to {model_path}"
         )
 
         return TrainingResult(
             metrics=metrics,
-            model_path=path,
+            model_path=model_path,
         )
