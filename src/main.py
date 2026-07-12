@@ -1,14 +1,15 @@
-from src.container import Container
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
+import logging
+logging.getLogger("tensorflow").setLevel(logging.ERROR)
+
+from src.cli.app import app
 
 
 def main() -> None:
-    container = Container()
-
-    trainer = container.trainer
-
-    predictor = container.predictor
-
-    # CLI / API / experiments will use these objects
+    app()
 
 
 if __name__ == "__main__":

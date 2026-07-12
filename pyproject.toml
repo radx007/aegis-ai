@@ -10,6 +10,9 @@ dependencies = [
     "scikit-learn"
 ]
 
+[project.scripts]
+aegis = "src.main:main"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["src*"]
