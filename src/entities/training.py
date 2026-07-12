@@ -6,7 +6,6 @@ from .metrics import EvaluationMetrics
 
 @dataclass(slots=True, frozen=True)
 class TrainingResult:
-
     metrics: EvaluationMetrics
 
     model_path: Path

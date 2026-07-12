@@ -1,5 +1,5 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from loguru import logger
 
@@ -28,5 +28,6 @@ def configure_logging() -> None:
         compression="zip",
         enqueue=True,
     )
+
 
 configure_logging()

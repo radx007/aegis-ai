@@ -5,7 +5,6 @@ import numpy as np
 
 @dataclass(slots=True, frozen=True)
 class EvaluationMetrics:
-
     accuracy: float
 
     precision: float

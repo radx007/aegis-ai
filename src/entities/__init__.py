@@ -1,5 +1,5 @@
-from .prediction import PredictionResult
 from .metrics import EvaluationMetrics
+from .prediction import PredictionResult
 from .training import TrainingResult
 
 __all__ = [

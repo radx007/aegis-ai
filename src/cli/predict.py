@@ -2,6 +2,7 @@ from pathlib import Path
 
 import typer
 
+
 def predict_command(
     audio: Path,
 ) -> None:
@@ -12,11 +13,6 @@ def predict_command(
 
     container = Container()
 
-    result = (
-        container.predictor.predict(audio)
-    )
+    result = container.predictor.predict(audio)
 
-    typer.echo(
-        f"{result.label} "
-        f"({result.confidence:.2%})"
-    )
+    typer.echo(f"{result.label} ({result.confidence:.2%})")

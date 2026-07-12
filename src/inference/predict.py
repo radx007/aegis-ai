@@ -7,11 +7,9 @@ from src.embeddings import EmbeddingExtractor
 from src.entities import PredictionResult
 from src.exceptions import PredictionError
 from src.logging import logger
-from src.models import ModelRepository
 
 
 class Predictor:
-
     def __init__(
         self,
         model: ClassifierMixin,
@@ -34,27 +32,16 @@ class Predictor:
                 np.expand_dims(embedding, axis=0)
             )[0]
 
-            label = str(
-                self._model.classes_[
-                    int(probabilities.argmax())
-                ]
-            )
+            label = str(self._model.classes_[int(probabilities.argmax())])
 
             confidence = float(probabilities.max())
 
         except Exception as exc:
+            logger.exception(f"Failed to predict {audio_path.name}.")
 
-            logger.exception(
-                f"Failed to predict {audio_path.name}."
-            )
+            raise PredictionError("Unable to make prediction.") from exc
 
-            raise PredictionError(
-                "Unable to make prediction."
-            ) from exc
-
-        logger.success(
-            f"{label} ({confidence:.2%})"
-        )
+        logger.success(f"{label} ({confidence:.2%})")
 
         return PredictionResult(
             label=label,
