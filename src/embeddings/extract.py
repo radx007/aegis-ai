@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 import librosa
 import numpy as np
@@ -14,7 +14,7 @@ class _YamnetModel(Protocol):
     def __call__(
         self,
         waveform: np.ndarray,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]: ...
+    ) -> tuple[Any, Any, Any]: ...
 
 
 class EmbeddingExtractor:
@@ -30,7 +30,7 @@ class EmbeddingExtractor:
     def extract(
         self,
         audio_path: Path,
-    ) -> np.ndarray:
+    ) -> Any:
         try:
             logger.info(f"Extracting embeddings from {audio_path.name}")
 

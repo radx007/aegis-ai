@@ -1,5 +1,7 @@
 from functools import cached_property
 
+from sklearn.base import ClassifierMixin
+
 from src.dataset import Dataset
 from src.embeddings import EmbeddingExtractor
 from src.evaluation import Evaluator
@@ -20,7 +22,7 @@ class Container:
         self._extractor = EmbeddingExtractor()
 
     @cached_property
-    def model(self):
+    def model(self) -> ClassifierMixin:
         """Lazily loads the heavy machine learning model on first access."""
         return self._repository.load()
 

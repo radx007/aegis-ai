@@ -1,3 +1,5 @@
+from typing import cast
+
 import numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -32,11 +34,21 @@ class Dataset:
 
             logger.success(f"Loaded {len(X)} samples.")
 
-            return train_test_split(
+            split = train_test_split(
                 X,
                 y,
                 test_size=test_size,
                 random_state=random_state,
+            )
+
+            return cast(
+                tuple[
+                    np.ndarray,
+                    np.ndarray,
+                    np.ndarray,
+                    np.ndarray,
+                ],
+                split,
             )
 
         except Exception as exc:
