@@ -83,3 +83,11 @@ python_functions = [
 ]
 
 addopts = "-ra"
+
+
+[tool.coverage.run]
+source = ["src"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false

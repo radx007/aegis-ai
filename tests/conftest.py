@@ -6,6 +6,7 @@ import pytest
 
 from src.entities.metrics import EvaluationMetrics
 from src.evaluation import Evaluator
+from src.exceptions.prediction import PredictionError
 
 
 @pytest.fixture
@@ -68,3 +69,18 @@ def mock_model() -> Mock:
     mock.predict_proba.return_value = np.array([[0.05, 0.95]])
     mock.classes_ = np.array(["alarm", "siren"])
     return mock
+
+
+@pytest.fixture
+def mock_model_failure() -> Mock:
+    mock_model = Mock()
+    mock_model.predict_proba.side_effect = PredictionError("Model crashed")
+    return mock_model
+
+
+@pytest.fixture
+def mock_extractor_failure() -> Mock:
+    mock_extractor = Mock()
+
+    mock_extractor.extract.side_effect = PredictionError("Audio error")
+    return mock_extractor
