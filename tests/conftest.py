@@ -53,3 +53,18 @@ def mock_evaluator() -> Mock:
         confusion_matrix=np.eye(2),
     )
     return mock
+
+
+@pytest.fixture
+def mock_extractor() -> Mock:
+    mock = Mock()
+    mock.extract.return_value = np.random.rand(1024)
+    return mock
+
+
+@pytest.fixture
+def mock_model() -> Mock:
+    mock = Mock()
+    mock.predict_proba.return_value = np.array([[0.05, 0.95]])
+    mock.classes_ = np.array(["alarm", "siren"])
+    return mock
