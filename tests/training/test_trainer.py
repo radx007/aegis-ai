@@ -44,8 +44,6 @@ def test_train_raises_training_error_when_model_fit_fails(
     mock_evaluator: Mock,
 ) -> None:
 
-    
-
     trainer = Trainer(
         dataset=mock_dataset,
         repository=mock_repository,
@@ -58,11 +56,7 @@ def test_train_raises_training_error_when_model_fit_fails(
         "src.training.train.LogisticRegression.fit",
         side_effect=TrainingError("Training failed"),
     ):
-
-        with pytest.raises(
-            TrainingError
-        ):
-
+        with pytest.raises(TrainingError):
             trainer.train()
 
     mock_repository.save.assert_not_called()

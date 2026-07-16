@@ -49,18 +49,12 @@ def test_predict_raises_prediction_error_when_extractor_fails(
     mock_extractor_failure: Mock,
 ) -> None:
 
-    
-
-
     predictor = Predictor(
         model=mock_model,
         extractor=mock_extractor_failure,
     )
 
     with pytest.raises(PredictionError):
-
-        predictor.predict(
-            Path("audio.wav")
-        )
+        predictor.predict(Path("audio.wav"))
 
     mock_model.predict_proba.assert_not_called()
