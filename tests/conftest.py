@@ -23,6 +23,9 @@ def y_true() -> np.ndarray:
 def y_pred() -> np.ndarray:
     return np.array([0, 1, 2, 3])
 
+@pytest.fixture
+def dummy_features() -> np.ndarray:
+    return np.random.rand(4, 1024)
 
 @pytest.fixture
 def mock_dataset() -> Mock:

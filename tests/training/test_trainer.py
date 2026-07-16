@@ -54,7 +54,7 @@ def test_train_raises_training_error_when_model_fit_fails(
 
     with patch(
         "src.training.train.LogisticRegression.fit",
-        side_effect=TrainingError("Training failed"),
+        side_effect=Exception
     ):
         with pytest.raises(TrainingError):
             trainer.train()

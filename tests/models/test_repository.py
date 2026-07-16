@@ -36,7 +36,7 @@ def test_save_raises_model_error(mock_model: Mock) -> None:
 
     with patch(
         "src.models.repository.joblib.dump",
-        side_effect=ModelError,
+        side_effect=Exception,
     ):
         with pytest.raises(ModelError):
             repository.save(mock_model)
@@ -48,7 +48,7 @@ def test_load_raises_model_error() -> None:
 
     with patch(
         "src.models.repository.joblib.load",
-        side_effect=ModelError,
+        side_effect=Exception,
     ):
         with pytest.raises(ModelError):
             repository.load()
