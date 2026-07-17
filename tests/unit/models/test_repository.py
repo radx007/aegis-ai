@@ -9,7 +9,7 @@ from src.models import ModelRepository
 
 def test_save_returns_model_path(mock_model: Mock) -> None:
 
-    repository = ModelRepository()
+    repository = ModelRepository(settings.baseline_model_path)
 
     with patch("src.models.repository.joblib.dump"):
         path = repository.save(mock_model)
@@ -19,7 +19,7 @@ def test_save_returns_model_path(mock_model: Mock) -> None:
 
 def test_load_returns_model(mock_model: Mock) -> None:
 
-    repository = ModelRepository()
+    repository = ModelRepository(settings.baseline_model_path)
 
     with patch(
         "src.models.repository.joblib.load",
@@ -32,7 +32,7 @@ def test_load_returns_model(mock_model: Mock) -> None:
 
 def test_save_raises_model_error(mock_model: Mock) -> None:
 
-    repository = ModelRepository()
+    repository = ModelRepository(settings.baseline_model_path)
 
     with patch(
         "src.models.repository.joblib.dump",
@@ -44,7 +44,7 @@ def test_save_raises_model_error(mock_model: Mock) -> None:
 
 def test_load_raises_model_error() -> None:
 
-    repository = ModelRepository()
+    repository = ModelRepository(settings.baseline_model_path)
 
     with patch(
         "src.models.repository.joblib.load",
