@@ -18,7 +18,7 @@ class Container:
 
     def __init__(self) -> None:
         self._repository = ModelRepository(settings.baseline_model_path)
-        self._dataset = Dataset()
+        self._dataset = Dataset(settings.processed_data_path)
         self._evaluator = Evaluator()
         self._extractor = EmbeddingExtractor()
 

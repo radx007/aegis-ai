@@ -3,6 +3,7 @@ from unittest.mock import Mock, patch
 import numpy as np
 import pytest
 
+from src.config import settings
 from src.dataset import Dataset
 from src.exceptions.dataset import DatasetError
 
@@ -13,7 +14,7 @@ def test_load_returns_arrays(y_true: np.ndarray, dummy_features: np.ndarray) -> 
         "src.dataset.dataset.np.load",
         side_effect=[dummy_features, y_true],
     ):
-        dataset = Dataset()
+        dataset = Dataset(settings.processed_data_path)
 
         loaded_X, loaded_y = dataset.load()
 
@@ -34,7 +35,7 @@ def test_load_raises_dataset_error() -> None:
         side_effect=Exception,
     ):
 
-        dataset = Dataset()
+        dataset = Dataset(settings.processed_data_path)
 
         with pytest.raises(
             DatasetError
@@ -44,7 +45,7 @@ def test_load_raises_dataset_error() -> None:
 
 def test_split_returns_four_arrays() -> None:
 
-    dataset = Dataset()
+    dataset = Dataset(settings.processed_data_path)
 
     dataset.load = Mock(
         return_value=(
@@ -65,7 +66,7 @@ def test_split_returns_four_arrays() -> None:
 
 def test_split_raises_dataset_error() -> None:
 
-    dataset = Dataset()
+    dataset = Dataset(settings.processed_data_path)
 
     dataset.load = Mock(
         side_effect=DatasetError(
