@@ -23,9 +23,11 @@ def y_true() -> np.ndarray:
 def y_pred() -> np.ndarray:
     return np.array([0, 1, 2, 3])
 
+
 @pytest.fixture
 def dummy_features() -> np.ndarray:
     return np.random.rand(4, 1024)
+
 
 @pytest.fixture
 def mock_dataset() -> Mock:
@@ -87,3 +89,17 @@ def mock_extractor_failure() -> Mock:
 
     mock_extractor.extract.side_effect = PredictionError("Audio error")
     return mock_extractor
+
+
+@pytest.fixture
+def fake_audio() -> tuple[np.ndarray, int]:
+    return np.random.rand(16000), 16000
+
+
+@pytest.fixture
+def mock_tfhub_model() -> Mock:
+    mock_embeddings = Mock()
+    mock_embeddings.numpy.return_value = np.ones((10, 1024))
+
+    mock_model = Mock(return_value=(None, mock_embeddings, None))
+    return mock_model
