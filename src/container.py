@@ -2,6 +2,7 @@ from functools import cached_property
 
 from sklearn.base import ClassifierMixin
 
+from src.config import settings
 from src.dataset import Dataset
 from src.embeddings import EmbeddingExtractor
 from src.evaluation import Evaluator
@@ -16,7 +17,7 @@ class Container:
     """
 
     def __init__(self) -> None:
-        self._repository = ModelRepository()
+        self._repository = ModelRepository(settings.baseline_model_path)
         self._dataset = Dataset()
         self._evaluator = Evaluator()
         self._extractor = EmbeddingExtractor()

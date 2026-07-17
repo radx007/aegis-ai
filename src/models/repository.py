@@ -3,14 +3,13 @@ from pathlib import Path
 import joblib
 from sklearn.base import ClassifierMixin
 
-from src.config import settings
 from src.exceptions import ModelError
 from src.logging import logger
 
 
 class ModelRepository:
-    def __init__(self) -> None:
-        self._model_path = settings.baseline_model_path
+    def __init__(self, model_path: Path) -> None:
+        self._model_path = model_path
 
     def save(
         self,
