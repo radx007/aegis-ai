@@ -1,7 +1,10 @@
 import numpy as np
+import pytest
 
 from src.entities import EvaluationMetrics
 from src.evaluation import Evaluator
+
+pytestmark = pytest.mark.unit
 
 
 def test_evaluate_returns_metrics(

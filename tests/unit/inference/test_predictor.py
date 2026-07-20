@@ -7,6 +7,8 @@ from src.entities import PredictionResult
 from src.exceptions.prediction import PredictionError
 from src.inference import Predictor
 
+pytestmark = pytest.mark.unit
+
 
 def test_predict_returns_prediction_result(
     mock_model: Mock,

@@ -1,10 +1,13 @@
 from pathlib import Path
 
 import numpy as np
+import pytest
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 
 from src.models import ModelRepository
+
+pytestmark = pytest.mark.integration
 
 
 def test_repository_round_trip(

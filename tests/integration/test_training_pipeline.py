@@ -1,12 +1,15 @@
 from pathlib import Path
 
 import numpy as np
+import pytest
 from sklearn.datasets import make_classification
 
 from src.dataset import Dataset
 from src.evaluation import Evaluator
 from src.models import ModelRepository
 from src.training import Trainer
+
+pytestmark = pytest.mark.integration
 
 
 def test_training_pipeline(

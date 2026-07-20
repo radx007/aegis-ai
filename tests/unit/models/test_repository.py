@@ -6,6 +6,8 @@ from src.config import settings
 from src.exceptions.model import ModelError
 from src.models import ModelRepository
 
+pytestmark = pytest.mark.unit
+
 
 def test_save_returns_model_path(mock_model: Mock) -> None:
 

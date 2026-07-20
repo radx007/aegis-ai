@@ -7,6 +7,8 @@ from src.entities import TrainingResult
 from src.exceptions.training import TrainingError
 from src.training import Trainer
 
+pytestmark = pytest.mark.unit
+
 
 def test_train_returns_training_result(
     mock_dataset: Mock,
@@ -52,10 +54,7 @@ def test_train_raises_training_error_when_model_fit_fails(
 
     from unittest.mock import patch
 
-    with patch(
-        "src.training.train.LogisticRegression.fit",
-        side_effect=Exception
-    ):
+    with patch("src.training.train.LogisticRegression.fit", side_effect=Exception):
         with pytest.raises(TrainingError):
             trainer.train()
 

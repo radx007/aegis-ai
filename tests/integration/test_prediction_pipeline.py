@@ -1,12 +1,15 @@
 from pathlib import Path
 from unittest.mock import Mock
 
+import pytest
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 
 from src.embeddings import EmbeddingExtractor
 from src.inference import Predictor
 from src.models import ModelRepository
+
+pytestmark = pytest.mark.integration
 
 
 def test_prediction_pipeline(

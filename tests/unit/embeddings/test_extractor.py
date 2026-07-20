@@ -7,6 +7,8 @@ import pytest
 from src.embeddings import EmbeddingExtractor
 from src.exceptions.embedding import EmbeddingError
 
+pytestmark = pytest.mark.unit
+
 
 def test_constructor_loads_model() -> None:
 
