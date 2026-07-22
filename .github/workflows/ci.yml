@@ -11,6 +11,12 @@ on:
       - main
       - develop
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 jobs:
   quality:
     name: Quality Checks
@@ -47,3 +53,5 @@ jobs:
 
       - name: Pytest
         run: pytest
+      - name: Build Package
+        run: python -m build
