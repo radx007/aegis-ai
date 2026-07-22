@@ -19,6 +19,7 @@ dependencies = [
     "pydantic-settings",
     "scikit-learn",
     "soundfile",
+    "setuptools",
     "tensorflow",
     "tensorflow-hub",
     "typer",
