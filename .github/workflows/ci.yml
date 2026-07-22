@@ -32,7 +32,8 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
+      - name: Upgrade pip and setuptools
+        run: python -m pip install --upgrade pip setuptools
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
