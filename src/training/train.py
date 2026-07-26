@@ -5,6 +5,7 @@ from src.entities import TrainingResult
 from src.evaluation import Evaluator
 from src.exceptions import TrainingError
 from src.logging import logger
+from src.mlops.tracking import ExperimentTracker
 from src.models import ModelRepository
 
 
@@ -14,10 +15,12 @@ class Trainer:
         dataset: Dataset,
         evaluator: Evaluator,
         repository: ModelRepository,
+        tracker: ExperimentTracker,
     ) -> None:
         self._dataset = dataset
         self._evaluator = evaluator
         self._repository = repository
+        self._tracker = tracker
 
     def train(self) -> TrainingResult:
         logger.info("Starting model training.")
