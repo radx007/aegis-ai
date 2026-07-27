@@ -7,6 +7,7 @@ from src.dataset import Dataset
 from src.embeddings import EmbeddingExtractor
 from src.evaluation import Evaluator
 from src.inference import Predictor
+from src.mlops.tracking import ExperimentTracker, NullTracker
 from src.models import ModelRepository
 from src.training import Trainer
 
@@ -51,6 +52,7 @@ class Container:
             dataset=self.dataset,
             evaluator=self.evaluator,
             repository=self.repository,
+            tracker=self.tracker,
         )
 
     @cached_property
@@ -59,3 +61,7 @@ class Container:
             model=self.model,
             extractor=self.extractor,
         )
+
+    @cached_property
+    def tracker(self) -> ExperimentTracker:
+        return NullTracker()
