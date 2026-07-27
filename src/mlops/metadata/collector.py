@@ -41,7 +41,7 @@ class MetadataCollector:
                 ["git", "rev-parse", "HEAD"],
                 text=True,
             ).strip()
-        except Exception:
+        except (subprocess.CalledProcessError, FileNotFoundError):
             return None
 
     @staticmethod
@@ -51,5 +51,5 @@ class MetadataCollector:
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"],
                 text=True,
             ).strip()
-        except Exception:
+        except (subprocess.CalledProcessError, FileNotFoundError):
             return None
