@@ -12,13 +12,13 @@ class MLflowTracker(ExperimentTracker):
     def log_parameters(self, parameters: dict[str, Any]) -> None:
         raise NotImplementedError
 
-    def log_metrics(self, metrics: dict[str, int | float]) -> None:
+    def log_metrics(self, metrics: dict[str, float]) -> None:
         raise NotImplementedError
 
-    def log_artifact(self, artifact: str | Path) -> None:
+    def log_artifact(self, artifact: Path) -> None:
         raise NotImplementedError
 
-    def log_model(self, model: Any) -> None:
+    def log_model(self, model: Path) -> None:
         raise NotImplementedError
 
     def end_run(self) -> None:
