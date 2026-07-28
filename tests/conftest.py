@@ -7,6 +7,9 @@ import pytest
 from src.entities.metrics import EvaluationMetrics
 from src.evaluation import Evaluator
 from src.exceptions.prediction import PredictionError
+from src.mlops.metadata.collector import MetadataCollector
+from src.mlops.tracking.base import ExperimentTracker
+from src.mlops.tracking.null_tracker import NullTracker
 
 
 @pytest.fixture
@@ -103,3 +106,13 @@ def mock_tfhub_model() -> Mock:
 
     mock_model = Mock(return_value=(None, mock_embeddings, None))
     return mock_model
+
+
+@pytest.fixture
+def tracker() -> ExperimentTracker:
+    return NullTracker()
+
+
+@pytest.fixture
+def metadata_collector() -> MetadataCollector:
+    return MetadataCollector()
