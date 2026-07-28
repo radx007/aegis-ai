@@ -6,9 +6,9 @@ from sklearn.datasets import make_classification
 
 from src.dataset import Dataset
 from src.evaluation import Evaluator
-from src.mlops.tracking import NullTracker
 from src.models import ModelRepository
 from src.training import Trainer
+from tests.conftest import metadata_collector, tracker
 
 pytestmark = pytest.mark.integration
 
@@ -52,7 +52,8 @@ def test_training_pipeline(
         dataset=dataset,
         evaluator=evaluator,
         repository=repository,
-        tracker=NullTracker(),
+        tracker=tracker,
+        metadata_collector=metadata_collector,
     )
 
     # Act

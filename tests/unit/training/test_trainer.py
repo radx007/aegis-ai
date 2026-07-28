@@ -5,8 +5,8 @@ import pytest
 
 from src.entities import TrainingResult
 from src.exceptions.training import TrainingError
-from src.mlops.tracking import NullTracker
 from src.training import Trainer
+from tests.conftest import metadata_collector, tracker
 
 pytestmark = pytest.mark.unit
 
@@ -21,7 +21,8 @@ def test_train_returns_training_result(
         dataset=mock_dataset,
         repository=mock_repository,
         evaluator=mock_evaluator,
-        tracker=NullTracker(),
+        tracker=tracker,
+        metadata_collector=metadata_collector,
     )
 
     result = trainer.train()
@@ -52,7 +53,8 @@ def test_train_raises_training_error_when_model_fit_fails(
         dataset=mock_dataset,
         repository=mock_repository,
         evaluator=mock_evaluator,
-        tracker=NullTracker()
+        tracker=tracker,
+        metadata_collector=metadata_collector,
     )
 
     from unittest.mock import patch

@@ -6,4 +6,5 @@ __all__ = [
     "PredictionResult",
     "EvaluationMetrics",
     "TrainingResult",
+    "ExperimentMetadata",
 ]
