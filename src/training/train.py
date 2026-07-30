@@ -28,6 +28,10 @@ class Trainer:
     def train(self) -> TrainingResult:
         logger.info("Starting model training.")
 
+        metadata = self._metadata_collector.collect()
+
+        self._tracker.log_metadata(metadata)
+
         (
             X_train,
             X_test,
