@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -8,13 +9,14 @@ from src.dataset import Dataset
 from src.evaluation import Evaluator
 from src.models import ModelRepository
 from src.training import Trainer
-from tests.conftest import metadata_collector, tracker
 
 pytestmark = pytest.mark.integration
 
 
 def test_training_pipeline(
     tmp_path: Path,
+    metadata_collector: Mock,
+    tracker: Mock,
 ) -> None:
 
     # Arrange

@@ -20,6 +20,10 @@ class Settings(BaseSettings):
 
     yamnet_url: str = "https://tfhub.dev/google/yamnet/1"
 
+    training_max_iter: int = 1000
+
+    training_random_state: int = 42
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore",
