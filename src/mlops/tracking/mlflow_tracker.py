@@ -1,11 +1,12 @@
 from pathlib import Path
 from typing import Any
 
+from src.entities.experiment_metadata import ExperimentMetadata
+
 from .base import ExperimentTracker
 
 
 class MLflowTracker(ExperimentTracker):
-
     def start_run(self, run_name: str | None = None) -> None:
         raise NotImplementedError
 
@@ -20,6 +21,12 @@ class MLflowTracker(ExperimentTracker):
 
     def log_model(self, model: Path) -> None:
         raise NotImplementedError
+
+    def log_metadata(
+        self,
+        metadata: ExperimentMetadata,
+    ) -> None:
+        raise NotImplementedError("MLflow integration has not been implemented yet.")
 
     def end_run(self) -> None:
         raise NotImplementedError

@@ -1,11 +1,12 @@
 from pathlib import Path
 from typing import Any
 
+from src.entities.experiment_metadata import ExperimentMetadata
+
 from .base import ExperimentTracker
 
 
 class NullTracker(ExperimentTracker):
-
     def start_run(self, run_name: str | None = None) -> None:
         return None
 
@@ -19,6 +20,12 @@ class NullTracker(ExperimentTracker):
         return None
 
     def log_model(self, model: Path) -> None:
+        return None
+
+    def log_metadata(
+        self,
+        metadata: ExperimentMetadata,
+    ) -> None:
         return None
 
     def end_run(self) -> None:
