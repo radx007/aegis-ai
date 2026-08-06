@@ -24,6 +24,10 @@ class Settings(BaseSettings):
 
     training_random_state: int = 42
 
+    mlflow_tracking_uri: str = "sqlite:///mlflow.db"
+
+    mlflow_experiment_name: str = "aegis-ai"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore",

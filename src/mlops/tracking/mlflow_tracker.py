@@ -3,6 +3,7 @@ from typing import Any
 
 import mlflow
 
+from src.config import settings
 from src.entities.experiment_metadata import ExperimentMetadata
 
 from .base import ExperimentTracker
@@ -10,6 +11,8 @@ from .base import ExperimentTracker
 
 class MLflowTracker(ExperimentTracker):
     def start_run(self, run_name: str | None = None) -> None:
+        mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
+        mlflow.set_experiment(settings.mlflow_experiment_name)
         mlflow.start_run(run_name=run_name)
 
     def log_parameters(self, parameters: dict[str, Any]) -> None:
