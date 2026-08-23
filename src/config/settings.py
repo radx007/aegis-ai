@@ -24,7 +24,7 @@ class Settings(BaseSettings):
 
     training_random_state: int = 42
 
-    mlflow_tracking_uri: str = "sqlite:///mlflow.db"
+    mlflow_tracking_uri: str = f"sqlite:///{(_ROOT / 'mlflow.db').resolve().as_posix()}"
 
     mlflow_experiment_name: str = "aegis-ai"
 
