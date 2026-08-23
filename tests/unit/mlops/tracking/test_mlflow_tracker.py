@@ -38,8 +38,10 @@ def test_start_run(
 
     tracker.start_run("baseline")
 
-    mock_set_tracking_uri.assert_called_once()
-    mock_set_experiment.assert_called_once()
+    from src.config import settings
+
+    mock_set_tracking_uri.assert_called_once_with(settings.mlflow_tracking_uri)
+    mock_set_experiment.assert_called_once_with(settings.mlflow_experiment_name)
     mock_start_run.assert_called_once_with(run_name="baseline")
 
 
