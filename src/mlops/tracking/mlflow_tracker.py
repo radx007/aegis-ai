@@ -1,6 +1,9 @@
 from pathlib import Path
 from typing import Any
 
+import mlflow
+
+from src.config import settings
 from src.entities.experiment_metadata import ExperimentMetadata
 
 from .base import ExperimentTracker
@@ -8,25 +11,40 @@ from .base import ExperimentTracker
 
 class MLflowTracker(ExperimentTracker):
     def start_run(self, run_name: str | None = None) -> None:
-        raise NotImplementedError
+        mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
+        mlflow.set_experiment(settings.mlflow_experiment_name)
+        mlflow.start_run(run_name=run_name)
 
     def log_parameters(self, parameters: dict[str, Any]) -> None:
-        raise NotImplementedError
+        mlflow.log_params(parameters)
 
     def log_metrics(self, metrics: dict[str, float]) -> None:
-        raise NotImplementedError
+        mlflow.log_metrics(metrics)
 
     def log_artifact(self, artifact: Path) -> None:
-        raise NotImplementedError
+        mlflow.log_artifact(str(artifact))
 
     def log_model(self, model: Path) -> None:
-        raise NotImplementedError
+        mlflow.log_artifact(str(model))
 
     def log_metadata(
         self,
         metadata: ExperimentMetadata,
     ) -> None:
-        raise NotImplementedError("MLflow integration has not been implemented yet.")
+        tags = {
+            "python_version": metadata.python_version,
+            "tensorflow_version": metadata.tensorflow_version,
+            "numpy_version": metadata.numpy_version,
+            "operating_system": metadata.operating_system,
+            "machine": metadata.machine,
+            "processor": metadata.processor,
+            "git_commit": metadata.git_commit or "unknown",
+            "git_branch": metadata.git_branch or "unknown",
+            "random_seed": str(metadata.random_seed),
+            "timestamp": metadata.timestamp.isoformat(),
+        }
+
+        mlflow.set_tags(tags)
 
     def end_run(self) -> None:
-        raise NotImplementedError
+        mlflow.end_run()

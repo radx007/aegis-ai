@@ -8,7 +8,7 @@ from src.embeddings import EmbeddingExtractor
 from src.evaluation import Evaluator
 from src.inference import Predictor
 from src.mlops.metadata import MetadataCollector
-from src.mlops.tracking import ExperimentTracker, NullTracker
+from src.mlops.tracking import ExperimentTracker, MLflowTracker
 from src.models import ModelRepository
 from src.training import Trainer
 
@@ -66,7 +66,7 @@ class Container:
 
     @cached_property
     def tracker(self) -> ExperimentTracker:
-        return NullTracker()
+        return MLflowTracker()
 
     @cached_property
     def metadata_collector(self) -> MetadataCollector:
