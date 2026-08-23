@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -26,13 +26,21 @@ def metadata() -> ExperimentMetadata:
     )
 
 
-def test_start_run() -> None:
+@patch("src.mlops.tracking.mlflow_tracker.mlflow.start_run")
+@patch("src.mlops.tracking.mlflow_tracker.mlflow.set_experiment")
+@patch("src.mlops.tracking.mlflow_tracker.mlflow.set_tracking_uri")
+def test_start_run(
+    mock_set_tracking_uri: Mock,
+    mock_set_experiment: Mock,
+    mock_start_run: Mock,
+) -> None:
     tracker = MLflowTracker()
 
-    with patch("src.mlops.tracking.mlflow_tracker.mlflow.start_run") as start_run:
-        tracker.start_run("baseline")
+    tracker.start_run("baseline")
 
-    start_run.assert_called_once_with(run_name="baseline")
+    mock_set_tracking_uri.assert_called_once()
+    mock_set_experiment.assert_called_once()
+    mock_start_run.assert_called_once_with(run_name="baseline")
 
 
 def test_log_parameters() -> None:
@@ -69,9 +77,7 @@ def test_log_artifact() -> None:
     tracker = MLflowTracker()
     artifact = Path("artifact.txt")
 
-    with patch(
-        "src.mlops.tracking.mlflow_tracker.mlflow.log_artifact"
-    ) as log_artifact:
+    with patch("src.mlops.tracking.mlflow_tracker.mlflow.log_artifact") as log_artifact:
         tracker.log_artifact(artifact)
 
     log_artifact.assert_called_once_with(str(artifact))
@@ -81,9 +87,7 @@ def test_log_model() -> None:
     tracker = MLflowTracker()
     model = Path("baseline.pkl")
 
-    with patch(
-        "src.mlops.tracking.mlflow_tracker.mlflow.log_artifact"
-    ) as log_artifact:
+    with patch("src.mlops.tracking.mlflow_tracker.mlflow.log_artifact") as log_artifact:
         tracker.log_model(model)
 
     log_artifact.assert_called_once_with(str(model))
@@ -94,9 +98,7 @@ def test_log_metadata(
 ) -> None:
     tracker = MLflowTracker()
 
-    with patch(
-        "src.mlops.tracking.mlflow_tracker.mlflow.set_tags"
-    ) as set_tags:
+    with patch("src.mlops.tracking.mlflow_tracker.mlflow.set_tags") as set_tags:
         tracker.log_metadata(metadata)
 
     set_tags.assert_called_once_with(
@@ -133,9 +135,7 @@ def test_log_metadata_handles_missing_git_information(
         random_seed=metadata.random_seed,
     )
 
-    with patch(
-        "src.mlops.tracking.mlflow_tracker.mlflow.set_tags"
-    ) as set_tags:
+    with patch("src.mlops.tracking.mlflow_tracker.mlflow.set_tags") as set_tags:
         tracker.log_metadata(metadata_without_git)
 
     tags = set_tags.call_args.args[0]
