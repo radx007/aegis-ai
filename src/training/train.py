@@ -7,6 +7,7 @@ from src.evaluation import Evaluator
 from src.exceptions import TrainingError
 from src.logging import logger
 from src.mlops.metadata import MetadataCollector
+from src.mlops.registry import ModelRegistry
 from src.mlops.tracking import ExperimentTracker
 from src.models import ModelRepository
 
@@ -19,12 +20,14 @@ class Trainer:
         repository: ModelRepository,
         tracker: ExperimentTracker,
         metadata_collector: MetadataCollector,
+        registry: ModelRegistry,
     ) -> None:
         self._dataset = dataset
         self._evaluator = evaluator
         self._repository = repository
         self._tracker = tracker
         self._metadata_collector = metadata_collector
+        self._registry = registry
 
     def train(self) -> TrainingResult:
         logger.info("Starting model training.")
@@ -83,6 +86,10 @@ class Trainer:
             model_path = self._repository.save(model)
 
             self._tracker.log_model(model)
+
+            self._registry.register_model(
+                name="aegis-classifier",
+            )
 
             logger.success(f"Model saved to {model_path}")
 

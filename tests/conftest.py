@@ -116,3 +116,7 @@ def tracker() -> ExperimentTracker:
 @pytest.fixture
 def metadata_collector() -> MetadataCollector:
     return MetadataCollector()
+
+@pytest.fixture
+def registry() -> Mock:
+    return Mock()

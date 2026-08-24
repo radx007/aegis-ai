@@ -8,6 +8,7 @@ from src.embeddings import EmbeddingExtractor
 from src.evaluation import Evaluator
 from src.inference import Predictor
 from src.mlops.metadata import MetadataCollector
+from src.mlops.registry import MLflowModelRegistry, ModelRegistry
 from src.mlops.tracking import ExperimentTracker, MLflowTracker
 from src.models import ModelRepository
 from src.training import Trainer
@@ -55,6 +56,7 @@ class Container:
             repository=self.repository,
             tracker=self.tracker,
             metadata_collector=self.metadata_collector,
+            registry=self.registry,
         )
 
     @cached_property
@@ -71,3 +73,7 @@ class Container:
     @cached_property
     def metadata_collector(self) -> MetadataCollector:
         return MetadataCollector()
+
+    @cached_property
+    def registry(self) -> ModelRegistry:
+        return MLflowModelRegistry()

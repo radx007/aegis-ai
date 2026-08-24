@@ -17,6 +17,7 @@ def test_training_pipeline(
     tmp_path: Path,
     metadata_collector: Mock,
     tracker: Mock,
+    registry: Mock,
 ) -> None:
 
     # Arrange
@@ -56,6 +57,7 @@ def test_training_pipeline(
         repository=repository,
         tracker=tracker,
         metadata_collector=metadata_collector,
+        registry=registry,
     )
 
     # Act
