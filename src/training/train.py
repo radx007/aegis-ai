@@ -82,7 +82,7 @@ class Trainer:
 
             model_path = self._repository.save(model)
 
-            self._tracker.log_model(model_path)
+            self._tracker.log_model(model)
 
             logger.success(f"Model saved to {model_path}")
 

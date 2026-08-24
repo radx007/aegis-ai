@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
+from sklearn.base import ClassifierMixin
+
 from src.entities.experiment_metadata import ExperimentMetadata
 
 
@@ -19,7 +21,7 @@ class ExperimentTracker(ABC):
     def log_artifact(self, artifact: Path) -> None: ...
 
     @abstractmethod
-    def log_model(self, model: Path) -> None: ...
+    def log_model(self, model: ClassifierMixin) -> None: ...
 
     @abstractmethod
     def log_metadata(self, metadata: ExperimentMetadata) -> None: ...
