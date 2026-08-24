@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Any
 
+from sklearn.base import ClassifierMixin
+
 from src.entities.experiment_metadata import ExperimentMetadata
 
 from .base import ExperimentTracker
@@ -19,7 +21,7 @@ class NullTracker(ExperimentTracker):
     def log_artifact(self, artifact: Path) -> None:
         return None
 
-    def log_model(self, model: Path) -> None:
+    def log_model(self, model: ClassifierMixin) -> None:
         return None
 
     def log_metadata(

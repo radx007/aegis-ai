@@ -18,6 +18,7 @@ def test_train_returns_training_result(
     mock_evaluator: Mock,
     tracker: Mock,
     metadata_collector: Mock,
+    registry: Mock,
 ) -> None:
 
     trainer = Trainer(
@@ -26,6 +27,7 @@ def test_train_returns_training_result(
         evaluator=mock_evaluator,
         tracker=tracker,
         metadata_collector=metadata_collector,
+        registry=registry,
     )
 
     result = trainer.train()
@@ -52,6 +54,7 @@ def test_train_raises_training_error_when_model_fit_fails(
     mock_evaluator: Mock,
     tracker: Mock,
     metadata_collector: Mock,
+    registry: Mock,
 ) -> None:
 
     trainer = Trainer(
@@ -60,6 +63,7 @@ def test_train_raises_training_error_when_model_fit_fails(
         evaluator=mock_evaluator,
         tracker=tracker,
         metadata_collector=metadata_collector,
+        registry=registry,
     )
 
     from unittest.mock import patch
@@ -77,6 +81,7 @@ def test_train_logs_experiment_tracking(
     mock_dataset: Mock,
     mock_repository: Mock,
     mock_evaluator: Mock,
+    registry: Mock,
 ) -> None:
 
     tracker = Mock()
@@ -102,6 +107,7 @@ def test_train_logs_experiment_tracking(
         evaluator=mock_evaluator,
         tracker=tracker,
         metadata_collector=metadata_collector,
+        registry=registry,
     )
     trainer.train()
 

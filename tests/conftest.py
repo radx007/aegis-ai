@@ -116,3 +116,9 @@ def tracker() -> ExperimentTracker:
 @pytest.fixture
 def metadata_collector() -> MetadataCollector:
     return MetadataCollector()
+
+@pytest.fixture
+def registry() -> Mock:
+    from src.mlops.registry import ModelRegistry
+
+    return Mock(spec=ModelRegistry)

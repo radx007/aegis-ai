@@ -87,12 +87,17 @@ def test_log_artifact() -> None:
 
 def test_log_model() -> None:
     tracker = MLflowTracker()
-    model = Path("baseline.pkl")
+    model = Mock()
 
-    with patch("src.mlops.tracking.mlflow_tracker.mlflow.log_artifact") as log_artifact:
+    with patch(
+        "src.mlops.tracking.mlflow_tracker.mlflow.sklearn.log_model"
+    ) as log_model:
         tracker.log_model(model)
 
-    log_artifact.assert_called_once_with(str(model))
+    log_model.assert_called_once_with(
+        sk_model=model,
+        artifact_path="model",
+    )
 
 
 def test_log_metadata(

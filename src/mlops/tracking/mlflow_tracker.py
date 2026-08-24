@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Any
 
 import mlflow
+from sklearn.base import ClassifierMixin
 
 from src.config import settings
 from src.entities.experiment_metadata import ExperimentMetadata
@@ -24,8 +25,11 @@ class MLflowTracker(ExperimentTracker):
     def log_artifact(self, artifact: Path) -> None:
         mlflow.log_artifact(str(artifact))
 
-    def log_model(self, model: Path) -> None:
-        mlflow.log_artifact(str(model))
+    def log_model(self, model: ClassifierMixin) -> None:
+        mlflow.sklearn.log_model(
+            sk_model=model,
+            artifact_path="model",
+        )
 
     def log_metadata(
         self,
