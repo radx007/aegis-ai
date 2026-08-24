@@ -28,7 +28,7 @@ class MLflowTracker(ExperimentTracker):
     def log_model(self, model: ClassifierMixin) -> None:
         mlflow.sklearn.log_model(
             sk_model=model,
-            name="model",
+            artifact_path="model",
         )
 
     def log_metadata(
