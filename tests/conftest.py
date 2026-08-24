@@ -119,4 +119,6 @@ def metadata_collector() -> MetadataCollector:
 
 @pytest.fixture
 def registry() -> Mock:
-    return Mock()
+    from src.mlops.registry import ModelRegistry
+
+    return Mock(spec=ModelRegistry)
