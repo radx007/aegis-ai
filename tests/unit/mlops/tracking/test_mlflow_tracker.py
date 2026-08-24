@@ -96,7 +96,7 @@ def test_log_model() -> None:
 
     log_model.assert_called_once_with(
         sk_model=model,
-        name="model",
+        artifact_path="model",
     )
 
 
