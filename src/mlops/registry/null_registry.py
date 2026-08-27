@@ -1,3 +1,5 @@
+from src.entities.registered_model import RegisteredModelVersion
+
 from .base import ModelRegistry
 
 
@@ -15,3 +17,13 @@ class NullModelRegistry(ModelRegistry):
         alias: str,
     ) -> None:
         return None
+
+    def get_model_by_alias(
+        self,
+        name: str,
+        alias: str,
+    ) -> RegisteredModelVersion:
+        return RegisteredModelVersion(
+            name=name,
+            version="",
+        )

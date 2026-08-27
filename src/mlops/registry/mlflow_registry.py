@@ -1,6 +1,7 @@
 import mlflow
 
 from src.config import settings
+from src.entities.registered_model import RegisteredModelVersion
 
 from .base import ModelRegistry
 
@@ -38,4 +39,23 @@ class MLflowModelRegistry(ModelRegistry):
             name=name,
             alias=alias,
             version=version,
+        )
+
+    def get_model_by_alias(
+        self,
+        name: str,
+        alias: str,
+    ) -> RegisteredModelVersion:
+        mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
+
+        client = mlflow.MlflowClient()
+
+        model_version = client.get_model_version_by_alias(
+            name=name,
+            alias=alias,
+        )
+
+        return RegisteredModelVersion(
+            name=model_version.name,
+            version=model_version.version,
         )

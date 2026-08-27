@@ -79,3 +79,35 @@ def test_promote_model() -> None:
         alias="champion",
         version="8",
     )
+
+
+def test_get_model_by_alias() -> None:
+    registry = MLflowModelRegistry()
+
+    client = Mock()
+
+    model_version = Mock()
+    model_version.name = "aegis-classifier"
+    model_version.version = "8"
+
+    client.get_model_version_by_alias.return_value = model_version
+
+    with (
+        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
+        patch(
+            "src.mlops.registry.mlflow_registry.mlflow.MlflowClient",
+            return_value=client,
+        ),
+    ):
+        result = registry.get_model_by_alias(
+            name="aegis-classifier",
+            alias="champion",
+        )
+
+    client.get_model_version_by_alias.assert_called_once_with(
+        name="aegis-classifier",
+        alias="champion",
+    )
+
+    assert result.name == "aegis-classifier"
+    assert result.version == "8"
