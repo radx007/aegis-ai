@@ -2,6 +2,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
+from src.config import settings
 from src.mlops.registry import MLflowModelRegistry
 
 pytestmark = pytest.mark.unit
@@ -21,12 +22,13 @@ def test_register_model() -> None:
         patch(
             "src.mlops.registry.mlflow_registry.mlflow.register_model"
         ) as register_model,
-        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
+        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri") as set_uri,
     ):
         registry.register_model(
             name="aegis-classifier",
         )
 
+    set_uri.assert_called_once_with(settings.mlflow_tracking_uri)
     register_model.assert_called_once_with(
         model_uri="runs:/test-run-id/model",
         name="aegis-classifier",
@@ -50,3 +52,30 @@ def test_register_model_raises_when_no_active_run() -> None:
         registry.register_model(
             name="aegis-classifier",
         )
+
+
+def test_promote_model() -> None:
+    registry = MLflowModelRegistry()
+
+    mock_client_instance = Mock()
+
+    with (
+        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri") as set_uri,
+        patch(
+            "src.mlops.registry.mlflow_registry.mlflow.MlflowClient",
+            return_value=mock_client_instance,
+        ) as mock_client_cls,
+    ):
+        registry.promote(
+            name="aegis-classifier",
+            version="8",
+            alias="champion",
+        )
+
+    set_uri.assert_called_once_with(settings.mlflow_tracking_uri)
+    mock_client_cls.assert_called_once_with(tracking_uri=settings.mlflow_tracking_uri)
+    mock_client_instance.set_registered_model_alias.assert_called_once_with(
+        name="aegis-classifier",
+        alias="champion",
+        version="8",
+    )

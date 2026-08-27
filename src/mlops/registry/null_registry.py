@@ -7,3 +7,11 @@ class NullModelRegistry(ModelRegistry):
         name: str,
     ) -> None:
         return None
+
+    def promote(
+        self,
+        name: str,
+        version: str,
+        alias: str,
+    ) -> None:
+        return None

@@ -11,3 +11,14 @@ def test_register_model_does_nothing() -> None:
     registry.register_model(
         name="aegis-classifier",
     )
+
+
+def test_promote_does_nothing() -> None:
+    registry = NullModelRegistry()
+
+    registry.promote(
+        name="aegis-classifier",
+        version="8",
+        alias="champion",
+    )
+ 

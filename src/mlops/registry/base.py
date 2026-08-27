@@ -7,3 +7,11 @@ class ModelRegistry(ABC):
         self,
         name: str,
     ) -> None: ...
+
+    @abstractmethod
+    def promote(
+        self,
+        name: str,
+        version: str,
+        alias: str,
+    ) -> None: ...
