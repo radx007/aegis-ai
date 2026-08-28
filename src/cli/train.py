@@ -29,6 +29,6 @@ def train_command(
 
     container = Container(data_path=data, model_path=model)
 
-    result = container.trainer.train()
+    container.trainer.train()
 
-    typer.echo(f"Training completed.\nModel: {result.model_path}")
+    typer.echo("Training completed.")

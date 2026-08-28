@@ -9,7 +9,6 @@ from src.logging import logger
 from src.mlops.metadata import MetadataCollector
 from src.mlops.registry import ModelRegistry
 from src.mlops.tracking import ExperimentTracker
-from src.models import ModelRepository
 
 
 class Trainer:
@@ -17,14 +16,12 @@ class Trainer:
         self,
         dataset: Dataset,
         evaluator: Evaluator,
-        repository: ModelRepository,
         tracker: ExperimentTracker,
         metadata_collector: MetadataCollector,
         registry: ModelRegistry,
     ) -> None:
         self._dataset = dataset
         self._evaluator = evaluator
-        self._repository = repository
         self._tracker = tracker
         self._metadata_collector = metadata_collector
         self._registry = registry
@@ -81,9 +78,7 @@ class Trainer:
                 }
             )
 
-            logger.info("Saving model...")
-
-            model_path = self._repository.save(model)
+            logger.info("Logging model to MLflow...")
 
             self._tracker.log_model(model)
 
@@ -91,11 +86,10 @@ class Trainer:
                 name="aegis-classifier",
             )
 
-            logger.success(f"Model saved to {model_path}")
+            logger.success("Model logged and registered successfully.")
 
             return TrainingResult(
                 metrics=metrics,
-                model_path=model_path,
             )
 
         except Exception as exc:

@@ -7,7 +7,6 @@ from sklearn.datasets import make_classification
 
 from src.dataset import Dataset
 from src.evaluation import Evaluator
-from src.models import ModelRepository
 from src.training import Trainer
 
 pytestmark = pytest.mark.integration
@@ -45,16 +44,11 @@ def test_training_pipeline(
         tmp_path,
     )
 
-    repository = ModelRepository(
-        tmp_path / "baseline.pkl",
-    )
-
     evaluator = Evaluator()
 
     trainer = Trainer(
         dataset=dataset,
         evaluator=evaluator,
-        repository=repository,
         tracker=tracker,
         metadata_collector=metadata_collector,
         registry=registry,
@@ -63,14 +57,12 @@ def test_training_pipeline(
     # Act
     result = trainer.train()
 
-    loaded_model = repository.load()
+    registry.register_model.assert_called_once_with(
+        name="aegis-classifier",
+    )
 
     # Assert
-    assert result.model_path.exists()
-
     assert result.metrics.accuracy >= 0.0
     assert result.metrics.precision >= 0.0
     assert result.metrics.recall >= 0.0
     assert result.metrics.f1 >= 0.0
-
-    assert loaded_model is not None

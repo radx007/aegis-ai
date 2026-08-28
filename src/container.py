@@ -53,7 +53,6 @@ class Container:
         return Trainer(
             dataset=self.dataset,
             evaluator=self.evaluator,
-            repository=self.repository,
             tracker=self.tracker,
             metadata_collector=self.metadata_collector,
             registry=self.registry,

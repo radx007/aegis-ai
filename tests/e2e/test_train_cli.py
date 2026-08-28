@@ -37,8 +37,6 @@ def test_train_command(
         y,
     )
 
-    model_path = tmp_path / "baseline.pkl"
-
     # Act
     result = runner.invoke(
         app,
@@ -46,16 +44,9 @@ def test_train_command(
             "train",
             "--data",
             str(processed),
-            "--model",
-            str(model_path),
         ],
     )
 
     # Assert
     assert result.exit_code == 0
-
-    assert model_path.exists()
-
     assert "Training completed." in result.stdout
-
-    assert str(model_path) in result.stdout
