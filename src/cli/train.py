@@ -27,7 +27,7 @@ def train_command(
     """
     from src.container import Container
 
-    container = Container(data_path=data, model_path=model)
+    container = Container(data_path=data)
 
     container.trainer.train()
 

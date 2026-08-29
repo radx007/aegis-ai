@@ -28,6 +28,10 @@ class Settings(BaseSettings):
 
     mlflow_experiment_name: str = "aegis-ai"
 
+    mlflow_model_name: str = "aegis-classifier"
+
+    mlflow_model_alias: str = "champion"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore",
