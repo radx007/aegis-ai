@@ -12,11 +12,7 @@ class Settings(BaseSettings):
 
     data_path: Path = _ROOT / "data"
 
-    models_path: Path = _ROOT / "models"
-
     processed_data_path: Path = _ROOT / "data" / "processed"
-
-    baseline_model_path: Path = _ROOT / "models" / "baseline.pkl"
 
     yamnet_url: str = "https://tfhub.dev/google/yamnet/1"
 

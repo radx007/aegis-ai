@@ -14,13 +14,6 @@ def train_command(
             help="Processed dataset directory.",
         ),
     ] = settings.processed_data_path,
-    model: Annotated[
-        Path,
-        typer.Option(
-            "--model",
-            help="Output model path.",
-        ),
-    ] = settings.baseline_model_path,
 ) -> None:
     """
     Train the classifier.
