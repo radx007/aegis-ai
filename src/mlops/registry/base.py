@@ -8,7 +8,7 @@ class ModelRegistry(ABC):
     def register_model(
         self,
         name: str,
-    ) -> None: ...
+    ) -> RegisteredModelVersion: ...
 
     @abstractmethod
     def promote(

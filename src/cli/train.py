@@ -14,21 +14,14 @@ def train_command(
             help="Processed dataset directory.",
         ),
     ] = settings.processed_data_path,
-    model: Annotated[
-        Path,
-        typer.Option(
-            "--model",
-            help="Output model path.",
-        ),
-    ] = settings.baseline_model_path,
 ) -> None:
     """
     Train the classifier.
     """
     from src.container import Container
 
-    container = Container(data_path=data, model_path=model)
+    container = Container(data_path=data)
 
-    result = container.trainer.train()
+    container.trainer.train()
 
-    typer.echo(f"Training completed.\nModel: {result.model_path}")
+    typer.echo("Training completed.")

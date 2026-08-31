@@ -5,9 +5,10 @@ import numpy as np
 import pytest
 from sklearn.datasets import make_classification
 
+from src.config import settings
 from src.dataset import Dataset
+from src.entities.registered_model import RegisteredModelVersion
 from src.evaluation import Evaluator
-from src.models import ModelRepository
 from src.training import Trainer
 
 pytestmark = pytest.mark.integration
@@ -45,16 +46,16 @@ def test_training_pipeline(
         tmp_path,
     )
 
-    repository = ModelRepository(
-        tmp_path / "baseline.pkl",
-    )
-
     evaluator = Evaluator()
+
+    registry.register_model.return_value = RegisteredModelVersion(
+        name=settings.mlflow_model_name,
+        version="28",
+    )
 
     trainer = Trainer(
         dataset=dataset,
         evaluator=evaluator,
-        repository=repository,
         tracker=tracker,
         metadata_collector=metadata_collector,
         registry=registry,
@@ -63,14 +64,18 @@ def test_training_pipeline(
     # Act
     result = trainer.train()
 
-    loaded_model = repository.load()
+    registry.register_model.assert_called_once_with(
+        name=settings.mlflow_model_name,
+    )
+
+    registry.promote.assert_called_once_with(
+        name=settings.mlflow_model_name,
+        version="28",
+        alias=settings.mlflow_model_alias,
+    )
 
     # Assert
-    assert result.model_path.exists()
-
     assert result.metrics.accuracy >= 0.0
     assert result.metrics.precision >= 0.0
     assert result.metrics.recall >= 0.0
     assert result.metrics.f1 >= 0.0
-
-    assert loaded_model is not None

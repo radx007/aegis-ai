@@ -3,30 +3,26 @@ from pathlib import Path
 
 from sklearn.base import ClassifierMixin
 
+from src.config import settings
 from src.dataset import Dataset
 from src.embeddings import EmbeddingExtractor
 from src.evaluation import Evaluator
 from src.inference import Predictor
+from src.mlops.loading.base import ModelLoader
+from src.mlops.loading.mlflow_loader import MLflowModelLoader
 from src.mlops.metadata import MetadataCollector
 from src.mlops.registry import MLflowModelRegistry, ModelRegistry
 from src.mlops.tracking import ExperimentTracker, MLflowTracker
-from src.models import ModelRepository
 from src.training import Trainer
 
 
 class Container:
     def __init__(
         self,
-        model_path: Path,
         data_path: Path | None = None,
     ) -> None:
 
-        self._model_path = model_path
         self._data_path = data_path
-
-    @cached_property
-    def repository(self) -> ModelRepository:
-        return ModelRepository(self._model_path)
 
     @cached_property
     def dataset(self) -> Dataset:
@@ -46,14 +42,24 @@ class Container:
 
     @cached_property
     def model(self) -> ClassifierMixin:
-        return self.repository.load()
+        registered_model = self.registry.get_model_by_alias(
+            name=settings.mlflow_model_name,
+            alias=settings.mlflow_model_alias,
+        )
+
+        return self.loader.load(
+            registered_model,
+        )
+
+    @cached_property
+    def loader(self) -> ModelLoader:
+        return MLflowModelLoader()
 
     @cached_property
     def trainer(self) -> Trainer:
         return Trainer(
             dataset=self.dataset,
             evaluator=self.evaluator,
-            repository=self.repository,
             tracker=self.tracker,
             metadata_collector=self.metadata_collector,
             registry=self.registry,

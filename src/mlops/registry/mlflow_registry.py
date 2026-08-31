@@ -10,7 +10,7 @@ class MLflowModelRegistry(ModelRegistry):
     def register_model(
         self,
         name: str,
-    ) -> None:
+    ) -> RegisteredModelVersion:
         mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
 
         run = mlflow.active_run()
@@ -20,9 +20,14 @@ class MLflowModelRegistry(ModelRegistry):
 
         model_uri = f"runs:/{run.info.run_id}/model"
 
-        mlflow.register_model(
+        model_version = mlflow.register_model(
             model_uri=model_uri,
             name=name,
+        )
+
+        return RegisteredModelVersion(
+            name=model_version.name,
+            version=model_version.version,
         )
 
     def promote(

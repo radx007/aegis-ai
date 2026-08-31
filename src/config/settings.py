@@ -12,11 +12,7 @@ class Settings(BaseSettings):
 
     data_path: Path = _ROOT / "data"
 
-    models_path: Path = _ROOT / "models"
-
     processed_data_path: Path = _ROOT / "data" / "processed"
-
-    baseline_model_path: Path = _ROOT / "models" / "baseline.pkl"
 
     yamnet_url: str = "https://tfhub.dev/google/yamnet/1"
 
@@ -26,7 +22,13 @@ class Settings(BaseSettings):
 
     mlflow_tracking_uri: str = f"sqlite:///{(_ROOT / 'mlflow.db').resolve().as_posix()}"
 
+    Mlflow_run_name: str = "aegis-classifier-training"
+
     mlflow_experiment_name: str = "aegis-ai"
+
+    mlflow_model_name: str = "aegis-classifier"
+
+    mlflow_model_alias: str = "champion"
 
     model_config = SettingsConfigDict(
         env_file=".env",

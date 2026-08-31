@@ -5,9 +5,11 @@ import pytest
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 
+from src.config import settings
 from src.embeddings import EmbeddingExtractor
 from src.inference import Predictor
-from src.models import ModelRepository
+from src.mlops.loading import ModelLoader
+from src.mlops.registry import ModelRegistry
 
 pytestmark = pytest.mark.integration
 
@@ -15,7 +17,6 @@ pytestmark = pytest.mark.integration
 def test_prediction_pipeline(
     tmp_path: Path,
 ) -> None:
-
     # Arrange
     X, y = make_classification(
         n_samples=50,
@@ -29,27 +30,28 @@ def test_prediction_pipeline(
     model = LogisticRegression(
         max_iter=1000,
     )
+    model.fit(X, y)
 
-    model.fit(
-        X,
-        y,
-    )
+    registry = Mock(spec=ModelRegistry)
+    loader = Mock(spec=ModelLoader)
 
-    repository = ModelRepository(
-        tmp_path / "baseline.pkl",
-    )
+    registered_model = Mock()
+    registered_model.name = settings.mlflow_model_name
+    registered_model.version = "8"
 
-    repository.save(
-        model,
-    )
+    registry.get_model_by_alias.return_value = registered_model
+    loader.load.return_value = model
 
-    loaded_model = repository.load()
-
-    extractor = Mock(
-        spec=EmbeddingExtractor,
-    )
-
+    extractor = Mock(spec=EmbeddingExtractor)
     extractor.extract.return_value = X[0]
+
+    # Resolve model through Registry → Loader
+    resolved_model = registry.get_model_by_alias(
+        name=settings.mlflow_model_name,
+        alias=settings.mlflow_model_alias,
+    )
+
+    loaded_model = loader.load(resolved_model)
 
     predictor = Predictor(
         model=loaded_model,
@@ -63,8 +65,16 @@ def test_prediction_pipeline(
 
     # Assert
     assert result.label in {"0", "1"}
-
     assert 0.0 <= result.confidence <= 1.0
+
+    registry.get_model_by_alias.assert_called_once_with(
+        name=settings.mlflow_model_name,
+        alias=settings.mlflow_model_alias,
+    )
+
+    loader.load.assert_called_once_with(
+        registered_model,
+    )
 
     extractor.extract.assert_called_once_with(
         Path("audio.wav"),

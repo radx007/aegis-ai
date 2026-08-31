@@ -1,4 +1,3 @@
-from pathlib import Path
 from unittest.mock import Mock
 
 import numpy as np
@@ -41,13 +40,6 @@ def mock_dataset() -> Mock:
         np.array([0, 1] * 5),
         np.array([0, 1]),
     )
-    return mock
-
-
-@pytest.fixture
-def mock_repository() -> Mock:
-    mock = Mock()
-    mock.save.return_value = Path("baseline.pkl")
     return mock
 
 
@@ -116,6 +108,7 @@ def tracker() -> ExperimentTracker:
 @pytest.fixture
 def metadata_collector() -> MetadataCollector:
     return MetadataCollector()
+
 
 @pytest.fixture
 def registry() -> Mock:

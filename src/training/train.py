@@ -9,7 +9,6 @@ from src.logging import logger
 from src.mlops.metadata import MetadataCollector
 from src.mlops.registry import ModelRegistry
 from src.mlops.tracking import ExperimentTracker
-from src.models import ModelRepository
 
 
 class Trainer:
@@ -17,14 +16,12 @@ class Trainer:
         self,
         dataset: Dataset,
         evaluator: Evaluator,
-        repository: ModelRepository,
         tracker: ExperimentTracker,
         metadata_collector: MetadataCollector,
         registry: ModelRegistry,
     ) -> None:
         self._dataset = dataset
         self._evaluator = evaluator
-        self._repository = repository
         self._tracker = tracker
         self._metadata_collector = metadata_collector
         self._registry = registry
@@ -32,7 +29,7 @@ class Trainer:
     def train(self) -> TrainingResult:
         logger.info("Starting model training.")
 
-        self._tracker.start_run("baseline")
+        self._tracker.start_run(settings.Mlflow_run_name)
 
         metadata = self._metadata_collector.collect()
 
@@ -81,21 +78,24 @@ class Trainer:
                 }
             )
 
-            logger.info("Saving model...")
-
-            model_path = self._repository.save(model)
+            logger.info("Logging model to MLflow...")
 
             self._tracker.log_model(model)
 
-            self._registry.register_model(
-                name="aegis-classifier",
+            registered_model = self._registry.register_model(
+                name=settings.mlflow_model_name,
             )
 
-            logger.success(f"Model saved to {model_path}")
+            self._registry.promote(
+                name=registered_model.name,
+                version=registered_model.version,
+                alias=settings.mlflow_model_alias,
+            )
+
+            logger.success("Model logged, registered, and promoted successfully.")
 
             return TrainingResult(
                 metrics=metrics,
-                model_path=model_path,
             )
 
         except Exception as exc:

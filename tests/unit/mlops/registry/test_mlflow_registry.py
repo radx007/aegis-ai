@@ -14,17 +14,22 @@ def test_register_model() -> None:
     run = Mock()
     run.info.run_id = "test-run-id"
 
+    registered_version = Mock()
+    registered_version.name = "aegis-classifier"
+    registered_version.version = "9"
+
     with (
         patch(
             "src.mlops.registry.mlflow_registry.mlflow.active_run",
             return_value=run,
         ),
         patch(
-            "src.mlops.registry.mlflow_registry.mlflow.register_model"
+            "src.mlops.registry.mlflow_registry.mlflow.register_model",
+            return_value=registered_version,
         ) as register_model,
         patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri") as set_uri,
     ):
-        registry.register_model(
+        result = registry.register_model(
             name="aegis-classifier",
         )
 
@@ -33,6 +38,9 @@ def test_register_model() -> None:
         model_uri="runs:/test-run-id/model",
         name="aegis-classifier",
     )
+
+    assert result.name == "aegis-classifier"
+    assert result.version == "9"
 
 
 def test_register_model_raises_when_no_active_run() -> None:
