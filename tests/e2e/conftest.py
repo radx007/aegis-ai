@@ -11,10 +11,8 @@ from src.mlops.registry import MLflowModelRegistry
 
 
 @pytest.fixture
-def e2e_audio(tmp_path: Path) -> Path:
-    """
-    Return a real WAV fixture used by prediction E2E tests.
-    """
+def e2e_audio() -> Path:
+    """Return a real WAV fixture used by prediction E2E tests."""
     source = Path("tests/e2e/fixtures/audio/test.wav")
 
     if not source.exists():
@@ -25,9 +23,7 @@ def e2e_audio(tmp_path: Path) -> Path:
 
 @pytest.fixture
 def champion_model(tmp_path: Path) -> None:
-    """
-    Prepare a real MLflow champion model for E2E tests.
-    """
+    """Prepare a real MLflow champion model for E2E tests."""
     X, y = make_classification(
         n_samples=50,
         n_features=1024,
@@ -38,7 +34,7 @@ def champion_model(tmp_path: Path) -> None:
     )
 
     processed = tmp_path / "processed"
-    processed.mkdir()
+    processed.mkdir(parents=True, exist_ok=True)
 
     np.save(processed / "X.npy", X)
     np.save(processed / "y.npy", y)
@@ -54,7 +50,7 @@ def champion_model(tmp_path: Path) -> None:
         ],
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, f"Training failed: {result.stdout}"
     assert "Training completed." in result.stdout
 
     registry = MLflowModelRegistry()

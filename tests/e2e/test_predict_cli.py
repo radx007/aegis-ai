@@ -12,6 +12,7 @@ pytestmark = pytest.mark.E2E
 
 def test_predict_command(
     e2e_audio: Path,
+    champion_model: None,
 ) -> None:
     # Act
     result = runner.invoke(
