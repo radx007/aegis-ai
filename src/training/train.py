@@ -29,7 +29,7 @@ class Trainer:
     def train(self) -> TrainingResult:
         logger.info("Starting model training.")
 
-        self._tracker.start_run("baseline")
+        self._tracker.start_run(settings.Mlflow_run_name)
 
         metadata = self._metadata_collector.collect()
 
@@ -82,11 +82,17 @@ class Trainer:
 
             self._tracker.log_model(model)
 
-            self._registry.register_model(
-                name="aegis-classifier",
+            registered_model = self._registry.register_model(
+                name=settings.mlflow_model_name,
             )
 
-            logger.success("Model logged and registered successfully.")
+            self._registry.promote(
+                name=registered_model.name,
+                version=registered_model.version,
+                alias=settings.mlflow_model_alias,
+            )
+
+            logger.success("Model logged, registered, and promoted successfully.")
 
             return TrainingResult(
                 metrics=metrics,

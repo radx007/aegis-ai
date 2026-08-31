@@ -5,6 +5,7 @@ import pytest
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 
+from src.config import settings
 from src.embeddings import EmbeddingExtractor
 from src.inference import Predictor
 from src.mlops.loading import ModelLoader
@@ -35,7 +36,7 @@ def test_prediction_pipeline(
     loader = Mock(spec=ModelLoader)
 
     registered_model = Mock()
-    registered_model.name = "aegis-classifier"
+    registered_model.name = settings.mlflow_model_name
     registered_model.version = "8"
 
     registry.get_model_by_alias.return_value = registered_model
@@ -46,8 +47,8 @@ def test_prediction_pipeline(
 
     # Resolve model through Registry → Loader
     resolved_model = registry.get_model_by_alias(
-        name="aegis-classifier",
-        alias="champion",
+        name=settings.mlflow_model_name,
+        alias=settings.mlflow_model_alias,
     )
 
     loaded_model = loader.load(resolved_model)
@@ -67,8 +68,8 @@ def test_prediction_pipeline(
     assert 0.0 <= result.confidence <= 1.0
 
     registry.get_model_by_alias.assert_called_once_with(
-        name="aegis-classifier",
-        alias="champion",
+        name=settings.mlflow_model_name,
+        alias=settings.mlflow_model_alias,
     )
 
     loader.load.assert_called_once_with(

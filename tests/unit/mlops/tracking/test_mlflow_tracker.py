@@ -36,13 +36,13 @@ def test_start_run(
 ) -> None:
     tracker = MLflowTracker()
 
-    tracker.start_run("baseline")
-
     from src.config import settings
+
+    tracker.start_run(settings.Mlflow_run_name)
 
     mock_set_tracking_uri.assert_called_once_with(settings.mlflow_tracking_uri)
     mock_set_experiment.assert_called_once_with(settings.mlflow_experiment_name)
-    mock_start_run.assert_called_once_with(run_name="baseline")
+    mock_start_run.assert_called_once_with(run_name=settings.Mlflow_run_name)
 
 
 def test_log_parameters() -> None:

@@ -5,7 +5,9 @@ import numpy as np
 import pytest
 from sklearn.datasets import make_classification
 
+from src.config import settings
 from src.dataset import Dataset
+from src.entities.registered_model import RegisteredModelVersion
 from src.evaluation import Evaluator
 from src.training import Trainer
 
@@ -46,6 +48,11 @@ def test_training_pipeline(
 
     evaluator = Evaluator()
 
+    registry.register_model.return_value = RegisteredModelVersion(
+        name=settings.mlflow_model_name,
+        version="28",
+    )
+
     trainer = Trainer(
         dataset=dataset,
         evaluator=evaluator,
@@ -58,7 +65,13 @@ def test_training_pipeline(
     result = trainer.train()
 
     registry.register_model.assert_called_once_with(
-        name="aegis-classifier",
+        name=settings.mlflow_model_name,
+    )
+
+    registry.promote.assert_called_once_with(
+        name=settings.mlflow_model_name,
+        version="28",
+        alias=settings.mlflow_model_alias,
     )
 
     # Assert
