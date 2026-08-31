@@ -90,7 +90,7 @@ def test_train_logs_experiment_tracking(
     )
 
     registry.register_model.return_value = RegisteredModelVersion(
-        name="aegis-classifier",
+        name=settings.mlflow_model_name,
         version="9",
     )
 
