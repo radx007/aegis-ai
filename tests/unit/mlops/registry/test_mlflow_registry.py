@@ -15,7 +15,7 @@ def test_register_model() -> None:
     run.info.run_id = "test-run-id"
 
     registered_version = Mock()
-    registered_version.name = "aegis-classifier"
+    registered_version.name = settings.mlflow_model_name
     registered_version.version = "9"
 
     with (
@@ -30,16 +30,16 @@ def test_register_model() -> None:
         patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri") as set_uri,
     ):
         result = registry.register_model(
-            name="aegis-classifier",
+            name=settings.mlflow_model_name,
         )
 
     set_uri.assert_called_once_with(settings.mlflow_tracking_uri)
     register_model.assert_called_once_with(
         model_uri="runs:/test-run-id/model",
-        name="aegis-classifier",
+        name=settings.mlflow_model_name,
     )
 
-    assert result.name == "aegis-classifier"
+    assert result.name == settings.mlflow_model_name
     assert result.version == "9"
 
 
@@ -58,7 +58,7 @@ def test_register_model_raises_when_no_active_run() -> None:
         ),
     ):
         registry.register_model(
-            name="aegis-classifier",
+            name=settings.mlflow_model_name,
         )
 
 
@@ -75,16 +75,16 @@ def test_promote_model() -> None:
         ) as mock_client_cls,
     ):
         registry.promote(
-            name="aegis-classifier",
+            name=settings.mlflow_model_name,
             version="8",
-            alias="champion",
+            alias=settings.mlflow_model_alias,
         )
 
     set_uri.assert_called_once_with(settings.mlflow_tracking_uri)
     mock_client_cls.assert_called_once_with(tracking_uri=settings.mlflow_tracking_uri)
     mock_client_instance.set_registered_model_alias.assert_called_once_with(
-        name="aegis-classifier",
-        alias="champion",
+        name=settings.mlflow_model_name,
+        alias=settings.mlflow_model_alias,
         version="8",
     )
 
@@ -95,7 +95,7 @@ def test_get_model_by_alias() -> None:
     client = Mock()
 
     model_version = Mock()
-    model_version.name = "aegis-classifier"
+    model_version.name = settings.mlflow_model_name 
     model_version.version = "8"
 
     client.get_model_version_by_alias.return_value = model_version
@@ -108,14 +108,14 @@ def test_get_model_by_alias() -> None:
         ),
     ):
         result = registry.get_model_by_alias(
-            name="aegis-classifier",
-            alias="champion",
+            name=settings.mlflow_model_name,
+            alias=settings.mlflow_model_alias,
         )
 
     client.get_model_version_by_alias.assert_called_once_with(
-        name="aegis-classifier",
-        alias="champion",
+        name=settings.mlflow_model_name,
+        alias=settings.mlflow_model_alias,
     )
 
-    assert result.name == "aegis-classifier"
+    assert result.name == settings.mlflow_model_name
     assert result.version == "8"

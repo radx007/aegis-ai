@@ -2,6 +2,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
+from src.config import settings
 from src.entities.registered_model import RegisteredModelVersion
 from src.mlops.loading import MLflowModelLoader
 
@@ -12,7 +13,7 @@ def test_load_model() -> None:
     loader = MLflowModelLoader()
 
     model = RegisteredModelVersion(
-        name="aegis-classifier",
+        name=settings.mlflow_model_name,
         version="8",
     )
 
