@@ -28,9 +28,7 @@ def metadata() -> ExperimentMetadata:
 
 @patch("src.mlops.tracking.mlflow_tracker.mlflow.start_run")
 @patch("src.mlops.tracking.mlflow_tracker.mlflow.set_experiment")
-@patch("src.mlops.tracking.mlflow_tracker.mlflow.set_tracking_uri")
 def test_start_run(
-    mock_set_tracking_uri: Mock,
     mock_set_experiment: Mock,
     mock_start_run: Mock,
 ) -> None:
@@ -40,7 +38,6 @@ def test_start_run(
 
     tracker.start_run(settings.Mlflow_run_name)
 
-    mock_set_tracking_uri.assert_called_once_with(settings.mlflow_tracking_uri)
     mock_set_experiment.assert_called_once_with(settings.mlflow_experiment_name)
     mock_start_run.assert_called_once_with(run_name=settings.Mlflow_run_name)
 

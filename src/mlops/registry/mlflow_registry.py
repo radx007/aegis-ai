@@ -1,6 +1,5 @@
 import mlflow
 
-from src.config import settings
 from src.entities.registered_model import RegisteredModelVersion
 
 from .base import ModelRegistry
@@ -11,8 +10,6 @@ class MLflowModelRegistry(ModelRegistry):
         self,
         name: str,
     ) -> RegisteredModelVersion:
-        mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
-
         run = mlflow.active_run()
 
         if run is None:
@@ -36,9 +33,7 @@ class MLflowModelRegistry(ModelRegistry):
         version: str,
         alias: str,
     ) -> None:
-        mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
-
-        client = mlflow.MlflowClient(tracking_uri=settings.mlflow_tracking_uri)
+        client = mlflow.MlflowClient()
 
         client.set_registered_model_alias(
             name=name,
@@ -51,8 +46,6 @@ class MLflowModelRegistry(ModelRegistry):
         name: str,
         alias: str,
     ) -> RegisteredModelVersion:
-        mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
-
         client = mlflow.MlflowClient()
 
         model_version = client.get_model_version_by_alias(

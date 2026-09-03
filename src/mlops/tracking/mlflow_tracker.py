@@ -12,7 +12,6 @@ from .base import ExperimentTracker
 
 class MLflowTracker(ExperimentTracker):
     def start_run(self, run_name: str | None = None) -> None:
-        mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
         mlflow.set_experiment(settings.mlflow_experiment_name)
         mlflow.start_run(run_name=run_name)
 
