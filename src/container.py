@@ -7,12 +7,21 @@ from src.config import settings
 from src.dataset import Dataset
 from src.embeddings import EmbeddingExtractor
 from src.evaluation import Evaluator
+from src.exceptions.model_loading import ModelLoadingError
 from src.inference import Predictor
 from src.mlops.loading.base import ModelLoader
 from src.mlops.loading.mlflow_loader import MLflowModelLoader
 from src.mlops.metadata import MetadataCollector
-from src.mlops.registry import MLflowModelRegistry, ModelRegistry
-from src.mlops.tracking import ExperimentTracker, MLflowTracker
+from src.mlops.registry import (
+    MLflowModelRegistry,
+    ModelRegistry,
+    NullModelRegistry,
+)
+from src.mlops.tracking import (
+    ExperimentTracker,
+    MLflowTracker,
+    NullTracker,
+)
 from src.training import Trainer
 
 
@@ -42,6 +51,11 @@ class Container:
 
     @cached_property
     def model(self) -> ClassifierMixin:
+        if not settings.mlflow_enabled:
+            raise ModelLoadingError(
+                "MLflow must be enabled to load the production model."
+            )
+
         registered_model = self.registry.get_model_by_alias(
             name=settings.mlflow_model_name,
             alias=settings.mlflow_model_alias,
@@ -74,7 +88,10 @@ class Container:
 
     @cached_property
     def tracker(self) -> ExperimentTracker:
-        return MLflowTracker()
+        if settings.mlflow_enabled:
+            return MLflowTracker()
+
+        return NullTracker()
 
     @cached_property
     def metadata_collector(self) -> MetadataCollector:
@@ -82,4 +99,7 @@ class Container:
 
     @cached_property
     def registry(self) -> ModelRegistry:
-        return MLflowModelRegistry()
+        if settings.mlflow_enabled:
+            return MLflowModelRegistry()
+
+        return NullModelRegistry()
