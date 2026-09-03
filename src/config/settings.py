@@ -24,7 +24,7 @@ class Settings(BaseSettings):
 
     mlflow_tracking_uri: str = f"sqlite:///{(_ROOT / 'mlflow.db').resolve().as_posix()}"
 
-    Mlflow_run_name: str = "aegis-classifier-training"
+    mlflow_run_name: str = "aegis-classifier-training"
 
     mlflow_experiment_name: str = "aegis-ai"
 

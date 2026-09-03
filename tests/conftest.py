@@ -9,6 +9,7 @@ from src.exceptions.prediction import PredictionError
 from src.mlops.metadata.collector import MetadataCollector
 from src.mlops.tracking.base import ExperimentTracker
 from src.mlops.tracking.null_tracker import NullTracker
+from src.training.config import TrainingConfig
 
 
 @pytest.fixture
@@ -115,3 +116,14 @@ def registry() -> Mock:
     from src.mlops.registry import ModelRegistry
 
     return Mock(spec=ModelRegistry)
+
+
+@pytest.fixture
+def training_config() -> TrainingConfig:
+    return TrainingConfig(
+        run_name="aegis-classifier-training",
+        max_iter=1000,
+        random_state=42,
+        model_name="aegis-classifier",
+        model_alias="champion",
+    )

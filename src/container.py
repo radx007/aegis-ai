@@ -23,6 +23,7 @@ from src.mlops.tracking import (
     NullTracker,
 )
 from src.training import Trainer
+from src.training.config import TrainingConfig
 
 
 class Container:
@@ -70,6 +71,16 @@ class Container:
         return MLflowModelLoader()
 
     @cached_property
+    def training_config(self) -> TrainingConfig:
+        return TrainingConfig(
+            run_name=settings.mlflow_run_name,
+            max_iter=settings.training_max_iter,
+            random_state=settings.training_random_state,
+            model_name=settings.mlflow_model_name,
+            model_alias=settings.mlflow_model_alias,
+        )
+
+    @cached_property
     def trainer(self) -> Trainer:
         return Trainer(
             dataset=self.dataset,
@@ -77,6 +88,7 @@ class Container:
             tracker=self.tracker,
             metadata_collector=self.metadata_collector,
             registry=self.registry,
+            config=self.training_config,
         )
 
     @cached_property
@@ -89,7 +101,7 @@ class Container:
     @cached_property
     def tracker(self) -> ExperimentTracker:
         if settings.mlflow_enabled:
-            return MLflowTracker()
+            return MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
         return NullTracker()
 

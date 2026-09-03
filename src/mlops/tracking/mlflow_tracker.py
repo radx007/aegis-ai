@@ -4,15 +4,17 @@ from typing import Any
 import mlflow
 from sklearn.base import ClassifierMixin
 
-from src.config import settings
 from src.entities.experiment_metadata import ExperimentMetadata
 
 from .base import ExperimentTracker
 
 
 class MLflowTracker(ExperimentTracker):
+    def __init__(self, experiment_name: str) -> None:
+        self._experiment_name = experiment_name
+
     def start_run(self, run_name: str | None = None) -> None:
-        mlflow.set_experiment(settings.mlflow_experiment_name)
+        mlflow.set_experiment(self._experiment_name)
         mlflow.start_run(run_name=run_name)
 
     def log_parameters(self, parameters: dict[str, Any]) -> None:
