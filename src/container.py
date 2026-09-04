@@ -12,8 +12,10 @@ from src.embeddings import (
 from src.evaluation import Evaluator
 from src.exceptions.model_loading import ModelLoadingError
 from src.inference import Predictor
-from src.mlops.loading.base import ModelLoader
-from src.mlops.loading.mlflow_loader import MLflowModelLoader
+from src.mlops.loading import (
+    MLflowModelLoader,
+    ModelLoader,
+)
 from src.mlops.metadata import MetadataCollector
 from src.mlops.registry import (
     MLflowModelRegistry,

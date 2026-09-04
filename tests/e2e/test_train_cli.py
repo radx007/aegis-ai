@@ -9,7 +9,7 @@ from src.cli.app import app
 
 runner = CliRunner()
 
-pytestmark = pytest.mark.E2E
+pytestmark = pytest.mark.e2e
 
 
 def test_train_command(
