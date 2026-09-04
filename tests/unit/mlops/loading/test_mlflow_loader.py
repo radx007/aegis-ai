@@ -19,13 +19,10 @@ def test_load_model() -> None:
 
     loaded_model = Mock()
 
-    with (
-        patch("src.mlops.loading.mlflow_loader.mlflow.set_tracking_uri"),
-        patch(
-            "src.mlops.loading.mlflow_loader.mlflow.sklearn.load_model",
-            return_value=loaded_model,
-        ) as load_model,
-    ):
+    with patch(
+        "src.mlops.loading.mlflow_loader.mlflow.sklearn.load_model",
+        return_value=loaded_model,
+    ) as load_model:
         result = loader.load(model)
 
     load_model.assert_called_once_with(
