@@ -5,7 +5,10 @@ from sklearn.base import ClassifierMixin
 
 from src.config import settings
 from src.dataset import Dataset
-from src.embeddings import EmbeddingExtractor
+from src.embeddings import (
+    EmbeddingModel,
+    YamnetEmbeddingExtractor,
+)
 from src.evaluation import Evaluator
 from src.exceptions.model_loading import ModelLoadingError
 from src.inference import Predictor
@@ -47,8 +50,11 @@ class Container:
         return Evaluator()
 
     @cached_property
-    def extractor(self) -> EmbeddingExtractor:
-        return EmbeddingExtractor()
+    def extractor(self) -> EmbeddingModel:
+        return YamnetEmbeddingExtractor(
+            model_url=settings.yamnet_url,
+            sample_rate=settings.sample_rate,
+        )
 
     @cached_property
     def model(self) -> ClassifierMixin:

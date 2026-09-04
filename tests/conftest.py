@@ -3,6 +3,7 @@ from unittest.mock import Mock
 import numpy as np
 import pytest
 
+from src.embeddings import EmbeddingModel
 from src.entities.metrics import EvaluationMetrics
 from src.evaluation import Evaluator
 from src.exceptions.prediction import PredictionError
@@ -59,9 +60,26 @@ def mock_evaluator() -> Mock:
 
 @pytest.fixture
 def mock_extractor() -> Mock:
-    mock = Mock()
-    mock.extract.return_value = np.random.rand(1024)
+    mock = Mock(
+        spec=EmbeddingModel,
+    )
+
+    mock.extract.return_value = np.random.rand(
+        1024,
+    )
+
     return mock
+
+
+@pytest.fixture
+def mock_extractor_failure() -> Mock:
+    mock_extractor = Mock(
+        spec=EmbeddingModel,
+    )
+
+    mock_extractor.extract.side_effect = PredictionError("Audio error")
+
+    return mock_extractor
 
 
 @pytest.fixture
@@ -77,14 +95,6 @@ def mock_model_failure() -> Mock:
     mock_model = Mock()
     mock_model.predict_proba.side_effect = PredictionError("Model crashed")
     return mock_model
-
-
-@pytest.fixture
-def mock_extractor_failure() -> Mock:
-    mock_extractor = Mock()
-
-    mock_extractor.extract.side_effect = PredictionError("Audio error")
-    return mock_extractor
 
 
 @pytest.fixture
