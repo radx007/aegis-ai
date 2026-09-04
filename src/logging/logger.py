@@ -15,16 +15,16 @@ def configure_logging() -> None:
 
     logger.add(
         sink=sys.stderr,
-        level=getattr(settings, "LOG_LEVEL_CONSOLE", "INFO"),
+        level=settings.log_level_console,
         colorize=True,
         enqueue=True,
     )
 
     logger.add(
         sink=logs_dir / "aegis.log",
-        level=getattr(settings, "LOG_LEVEL_FILE", "DEBUG"),
-        rotation=getattr(settings, "LOG_ROTATION", "10 MB"),
-        retention=getattr(settings, "LOG_RETENTION", "30 days"),
+        level=settings.log_level_file,
+        rotation=settings.log_rotation,
+        retention=settings.log_retention,
         compression="zip",
         enqueue=True,
     )

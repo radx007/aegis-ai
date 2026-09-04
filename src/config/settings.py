@@ -34,6 +34,14 @@ class Settings(BaseSettings):
 
     mlflow_model_alias: str = "champion"
 
+    log_level_console: str = "INFO"
+
+    log_level_file: str = "DEBUG"
+
+    log_rotation: str = "10 MB"
+
+    log_retention: str = "30 days"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore",
