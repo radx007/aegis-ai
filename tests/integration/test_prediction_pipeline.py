@@ -6,7 +6,7 @@ from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 
 from src.config import settings
-from src.embeddings.yamnet import YamnetEmbeddingExtractor
+from src.embeddings import EmbeddingModel
 from src.inference import Predictor
 from src.mlops.loading import ModelLoader
 from src.mlops.registry import ModelRegistry
@@ -42,7 +42,7 @@ def test_prediction_pipeline(
     registry.get_model_by_alias.return_value = registered_model
     loader.load.return_value = model
 
-    extractor = Mock(spec=YamnetEmbeddingExtractor)
+    extractor = Mock(spec=EmbeddingModel)
     extractor.extract.return_value = X[0]
 
     # Resolve model through Registry → Loader
