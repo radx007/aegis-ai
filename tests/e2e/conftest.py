@@ -22,8 +22,20 @@ def e2e_audio() -> Path:
 
 
 @pytest.fixture
-def champion_model(tmp_path: Path) -> None:
+def champion_model(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """Prepare a real MLflow champion model for E2E tests."""
+
+    tracking_uri = f"sqlite:///{(tmp_path / 'mlflow.db').resolve().as_posix()}"
+
+    monkeypatch.setattr(
+        settings,
+        "mlflow_tracking_uri",
+        tracking_uri,
+    )
+
     X, y = make_classification(
         n_samples=50,
         n_features=1024,
