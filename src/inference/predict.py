@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from sklearn.base import ClassifierMixin
 
-from src.embeddings import EmbeddingExtractor
+from src.embeddings import EmbeddingModel
 from src.entities import PredictionResult
 from src.exceptions import PredictionError
 from src.logging import logger
@@ -13,7 +13,7 @@ class Predictor:
     def __init__(
         self,
         model: ClassifierMixin,
-        extractor: EmbeddingExtractor,
+        extractor: EmbeddingModel,
     ) -> None:
         self._extractor = extractor
         self._model = model
@@ -25,11 +25,16 @@ class Predictor:
 
         logger.info(f"Predicting {audio_path.name}")
 
-        embedding = self._extractor.extract(audio_path)
+        embedding = self._extractor.extract(
+        audio_path,
+        )
 
         try:
             probabilities = self._model.predict_proba(
-                np.expand_dims(embedding, axis=0)
+                np.expand_dims(
+                    embedding,
+                    axis=0,
+                )
             )[0]
 
             label = str(self._model.classes_[int(probabilities.argmax())])

@@ -27,13 +27,12 @@ def test_register_model() -> None:
             "src.mlops.registry.mlflow_registry.mlflow.register_model",
             return_value=registered_version,
         ) as register_model,
-        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri") as set_uri,
+        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
     ):
         result = registry.register_model(
             name=settings.mlflow_model_name,
         )
 
-    set_uri.assert_called_once_with(settings.mlflow_tracking_uri)
     register_model.assert_called_once_with(
         model_uri="runs:/test-run-id/model",
         name=settings.mlflow_model_name,
@@ -68,7 +67,7 @@ def test_promote_model() -> None:
     mock_client_instance = Mock()
 
     with (
-        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri") as set_uri,
+        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
         patch(
             "src.mlops.registry.mlflow_registry.mlflow.MlflowClient",
             return_value=mock_client_instance,
@@ -80,8 +79,7 @@ def test_promote_model() -> None:
             alias=settings.mlflow_model_alias,
         )
 
-    set_uri.assert_called_once_with(settings.mlflow_tracking_uri)
-    mock_client_cls.assert_called_once_with(tracking_uri=settings.mlflow_tracking_uri)
+    mock_client_cls.assert_called_once_with()
     mock_client_instance.set_registered_model_alias.assert_called_once_with(
         name=settings.mlflow_model_name,
         alias=settings.mlflow_model_alias,
@@ -95,7 +93,7 @@ def test_get_model_by_alias() -> None:
     client = Mock()
 
     model_version = Mock()
-    model_version.name = settings.mlflow_model_name 
+    model_version.name = settings.mlflow_model_name
     model_version.version = "8"
 
     client.get_model_version_by_alias.return_value = model_version

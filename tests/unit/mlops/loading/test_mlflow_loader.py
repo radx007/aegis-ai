@@ -20,9 +20,7 @@ def test_load_model() -> None:
     loaded_model = Mock()
 
     with (
-        patch(
-            "src.mlops.loading.mlflow_loader.mlflow.set_tracking_uri"
-        ) as set_tracking_uri,
+        patch("src.mlops.loading.mlflow_loader.mlflow.set_tracking_uri"),
         patch(
             "src.mlops.loading.mlflow_loader.mlflow.sklearn.load_model",
             return_value=loaded_model,
@@ -30,7 +28,6 @@ def test_load_model() -> None:
     ):
         result = loader.load(model)
 
-    set_tracking_uri.assert_called_once()
     load_model.assert_called_once_with(
         "models:/aegis-classifier/8",
     )

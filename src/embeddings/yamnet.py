@@ -5,9 +5,10 @@ import librosa
 import numpy as np
 import tensorflow_hub as hub
 
-from src.config import settings
 from src.exceptions import EmbeddingError
 from src.logging import logger
+
+from .base import EmbeddingModel
 
 
 class _YamnetModel(Protocol):
@@ -17,11 +18,18 @@ class _YamnetModel(Protocol):
     ) -> tuple[Any, Any, Any]: ...
 
 
-class EmbeddingExtractor:
-    def __init__(self) -> None:
-        try:
-            self.model: _YamnetModel = hub.load(settings.yamnet_url)
+class YamnetEmbeddingExtractor(EmbeddingModel):
+    def __init__(
+        self,
+        model_url: str,
+        sample_rate: int,
+    ) -> None:
+        self._sample_rate = sample_rate
 
+        try:
+            self._model: _YamnetModel = hub.load(
+                model_url,
+            )
         except Exception as exc:
             logger.exception("Failed to load embedding model.")
 
@@ -30,22 +38,33 @@ class EmbeddingExtractor:
     def extract(
         self,
         audio_path: Path,
-    ) -> Any:
+    ) -> np.ndarray:
         try:
             logger.info(f"Extracting embeddings from {audio_path.name}")
 
             waveform, _sr = librosa.load(
                 audio_path,
-                sr=settings.sample_rate,
+                sr=self._sample_rate,
             )
 
-            waveform = waveform.astype(np.float32)
+            waveform = waveform.astype(
+                np.float32,
+            )
 
-            _scores, embeddings, _spec = self.model(waveform)
+            _scores, embeddings, _spec = self._model(
+                waveform,
+            )
+
+            embedding: np.ndarray = np.asarray(
+                embeddings.numpy().mean(
+                    axis=0,
+                ),
+                dtype=np.float32,
+            )
 
             logger.success(f"Extracted embeddings from {audio_path.name}")
 
-            return embeddings.numpy().mean(axis=0)
+            return embedding
 
         except Exception as exc:
             logger.exception(f"Failed to extract embeddings from {audio_path.name}.")

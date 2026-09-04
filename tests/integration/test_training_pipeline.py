@@ -10,6 +10,7 @@ from src.dataset import Dataset
 from src.entities.registered_model import RegisteredModelVersion
 from src.evaluation import Evaluator
 from src.training import Trainer
+from src.training.config import TrainingConfig
 
 pytestmark = pytest.mark.integration
 
@@ -53,12 +54,22 @@ def test_training_pipeline(
         version="28",
     )
 
+    config = TrainingConfig(
+        run_name=settings.mlflow_run_name,
+        max_iter=100,
+        random_state=42,
+        model_name=settings.mlflow_model_name,
+        model_alias=settings.mlflow_model_alias,
+        test_size=0.2,
+    )
+
     trainer = Trainer(
         dataset=dataset,
         evaluator=evaluator,
         tracker=tracker,
         metadata_collector=metadata_collector,
         registry=registry,
+        config=config,
     )
 
     # Act

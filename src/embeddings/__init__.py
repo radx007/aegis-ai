@@ -1,3 +1,7 @@
-from .extract import EmbeddingExtractor
+from .base import EmbeddingModel
+from .yamnet import YamnetEmbeddingExtractor
 
-__all__ = ["EmbeddingExtractor"]
+__all__ = [
+    "EmbeddingModel",
+    "YamnetEmbeddingExtractor",
+]

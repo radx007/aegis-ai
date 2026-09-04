@@ -4,6 +4,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
+from src.config import settings
 from src.entities.experiment_metadata import ExperimentMetadata
 from src.mlops.tracking import MLflowTracker
 
@@ -28,25 +29,21 @@ def metadata() -> ExperimentMetadata:
 
 @patch("src.mlops.tracking.mlflow_tracker.mlflow.start_run")
 @patch("src.mlops.tracking.mlflow_tracker.mlflow.set_experiment")
-@patch("src.mlops.tracking.mlflow_tracker.mlflow.set_tracking_uri")
 def test_start_run(
-    mock_set_tracking_uri: Mock,
     mock_set_experiment: Mock,
     mock_start_run: Mock,
 ) -> None:
-    tracker = MLflowTracker()
 
-    from src.config import settings
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
-    tracker.start_run(settings.Mlflow_run_name)
+    tracker.start_run(settings.mlflow_run_name)
 
-    mock_set_tracking_uri.assert_called_once_with(settings.mlflow_tracking_uri)
     mock_set_experiment.assert_called_once_with(settings.mlflow_experiment_name)
-    mock_start_run.assert_called_once_with(run_name=settings.Mlflow_run_name)
+    mock_start_run.assert_called_once_with(run_name=settings.mlflow_run_name)
 
 
 def test_log_parameters() -> None:
-    tracker = MLflowTracker()
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
     parameters = {
         "max_iter": 1000.0,
@@ -60,7 +57,7 @@ def test_log_parameters() -> None:
 
 
 def test_log_metrics() -> None:
-    tracker = MLflowTracker()
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name )
 
     metrics = {
         "accuracy": 1.0,
@@ -76,7 +73,7 @@ def test_log_metrics() -> None:
 
 
 def test_log_artifact() -> None:
-    tracker = MLflowTracker()
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
     artifact = Path("artifact.txt")
 
     with patch("src.mlops.tracking.mlflow_tracker.mlflow.log_artifact") as log_artifact:
@@ -86,7 +83,7 @@ def test_log_artifact() -> None:
 
 
 def test_log_model() -> None:
-    tracker = MLflowTracker()
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
     model = Mock()
 
     with patch(
@@ -103,7 +100,7 @@ def test_log_model() -> None:
 def test_log_metadata(
     metadata: ExperimentMetadata,
 ) -> None:
-    tracker = MLflowTracker()
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
     with patch("src.mlops.tracking.mlflow_tracker.mlflow.set_tags") as set_tags:
         tracker.log_metadata(metadata)
@@ -127,7 +124,7 @@ def test_log_metadata(
 def test_log_metadata_handles_missing_git_information(
     metadata: ExperimentMetadata,
 ) -> None:
-    tracker = MLflowTracker()
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
     metadata_without_git = ExperimentMetadata(
         timestamp=metadata.timestamp,
@@ -152,7 +149,7 @@ def test_log_metadata_handles_missing_git_information(
 
 
 def test_end_run() -> None:
-    tracker = MLflowTracker()
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
     with patch("src.mlops.tracking.mlflow_tracker.mlflow.end_run") as end_run:
         tracker.end_run()

@@ -3,12 +3,14 @@ from unittest.mock import Mock
 import numpy as np
 import pytest
 
+from src.embeddings import EmbeddingModel
 from src.entities.metrics import EvaluationMetrics
 from src.evaluation import Evaluator
 from src.exceptions.prediction import PredictionError
 from src.mlops.metadata.collector import MetadataCollector
 from src.mlops.tracking.base import ExperimentTracker
 from src.mlops.tracking.null_tracker import NullTracker
+from src.training.config import TrainingConfig
 
 
 @pytest.fixture
@@ -58,9 +60,26 @@ def mock_evaluator() -> Mock:
 
 @pytest.fixture
 def mock_extractor() -> Mock:
-    mock = Mock()
-    mock.extract.return_value = np.random.rand(1024)
+    mock = Mock(
+        spec=EmbeddingModel,
+    )
+
+    mock.extract.return_value = np.random.rand(
+        1024,
+    )
+
     return mock
+
+
+@pytest.fixture
+def mock_extractor_failure() -> Mock:
+    mock_extractor = Mock(
+        spec=EmbeddingModel,
+    )
+
+    mock_extractor.extract.side_effect = PredictionError("Audio error")
+
+    return mock_extractor
 
 
 @pytest.fixture
@@ -76,14 +95,6 @@ def mock_model_failure() -> Mock:
     mock_model = Mock()
     mock_model.predict_proba.side_effect = PredictionError("Model crashed")
     return mock_model
-
-
-@pytest.fixture
-def mock_extractor_failure() -> Mock:
-    mock_extractor = Mock()
-
-    mock_extractor.extract.side_effect = PredictionError("Audio error")
-    return mock_extractor
 
 
 @pytest.fixture
@@ -115,3 +126,15 @@ def registry() -> Mock:
     from src.mlops.registry import ModelRegistry
 
     return Mock(spec=ModelRegistry)
+
+
+@pytest.fixture
+def training_config() -> TrainingConfig:
+    return TrainingConfig(
+        run_name="aegis-classifier-training",
+        max_iter=1000,
+        random_state=42,
+        model_name="aegis-classifier",
+        model_alias="champion",
+        test_size=0.2,
+    )
