@@ -136,4 +136,5 @@ def training_config() -> TrainingConfig:
         random_state=42,
         model_name="aegis-classifier",
         model_alias="champion",
+        test_size=0.2,
     )

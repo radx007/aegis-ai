@@ -50,7 +50,10 @@ class Trainer:
                 X_test,
                 y_train,
                 y_test,
-            ) = self._dataset.split()
+            ) = self._dataset.split(
+                test_size=self._config.test_size,
+                random_state=self._config.random_state,
+            )
 
             model = LogisticRegression(
                 max_iter=self._config.max_iter,

@@ -8,3 +8,4 @@ class TrainingConfig:
     random_state: int
     model_name: str
     model_alias: str
+    test_size: float

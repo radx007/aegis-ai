@@ -60,6 +60,7 @@ def test_training_pipeline(
         random_state=42,
         model_name=settings.mlflow_model_name,
         model_alias=settings.mlflow_model_alias,
+        test_size=0.2,
     )
 
     trainer = Trainer(

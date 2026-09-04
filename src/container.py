@@ -84,6 +84,7 @@ class Container:
             random_state=settings.training_random_state,
             model_name=settings.mlflow_model_name,
             model_alias=settings.mlflow_model_alias,
+            test_size=settings.training_test_size,
         )
 
     @cached_property

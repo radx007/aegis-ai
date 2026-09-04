@@ -20,6 +20,8 @@ class Settings(BaseSettings):
 
     training_random_state: int = 42
 
+    training_test_size: float = 0.2
+
     mlflow_enabled: bool = True
 
     mlflow_tracking_uri: str = f"sqlite:///{(_ROOT / 'mlflow.db').resolve().as_posix()}"

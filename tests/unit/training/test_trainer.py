@@ -41,7 +41,10 @@ def test_train_returns_training_result(
 
     assert result.metrics.accuracy == 1.0
 
-    mock_dataset.split.assert_called_once()
+    mock_dataset.split.assert_called_once_with(
+        test_size=0.2,
+        random_state=42,
+    )
 
     mock_evaluator.evaluate.assert_called_once()
 
@@ -145,6 +148,7 @@ def test_train_uses_injected_configuration(
         random_state=99,
         model_name="custom-model",
         model_alias="candidate",
+        test_size=0.2,
     )
 
     mock_tracker = Mock()

@@ -32,8 +32,8 @@ class Dataset:
 
     def split(
         self,
-        test_size: float = 0.2,
-        random_state: int = 42,
+        test_size: float,
+        random_state: int,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         try:
             logger.info("Loading processed dataset.")
