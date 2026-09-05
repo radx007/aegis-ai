@@ -26,7 +26,7 @@ class Predictor:
         logger.info(f"Predicting {audio_path.name}")
 
         embedding = self._extractor.extract(
-        audio_path,
+            audio_path,
         )
 
         try:

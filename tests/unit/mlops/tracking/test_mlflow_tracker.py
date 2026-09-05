@@ -57,7 +57,7 @@ def test_log_parameters() -> None:
 
 
 def test_log_metrics() -> None:
-    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name )
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
     metrics = {
         "accuracy": 1.0,
