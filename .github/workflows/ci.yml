@@ -18,7 +18,6 @@ env:
   PYTHON_VERSION: "3.12"
 
 jobs:
-
   lint:
     name: Ruff
     runs-on: ubuntu-latest
@@ -50,7 +49,7 @@ jobs:
       - run: mypy src
 
   test:
-    name: Tests
+    name: Unit & Integration Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -62,7 +61,22 @@ jobs:
 
       - run: pip install -e ".[dev]"
 
-      - run: pytest
+      - run: pytest -m "not e2e"
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - run: pip install -e ".[dev]"
+
+      - run: pytest -m e2e
 
   build:
     name: Build Package
@@ -71,6 +85,7 @@ jobs:
       - lint
       - typecheck
       - test
+      - e2e
 
     runs-on: ubuntu-latest
 
