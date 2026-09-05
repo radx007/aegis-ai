@@ -80,8 +80,8 @@ def test_train_logs_experiment_tracking(
     training_config: TrainingConfig,
 ) -> None:
 
-    tracker = Mock()
-    metadata_collector = Mock()
+    mock_tracker = Mock()
+    mock_metadata_collector = Mock()
     metadata = ExperimentMetadata(
         timestamp=datetime.now(),
         python_version="3.12.0",
@@ -100,25 +100,25 @@ def test_train_logs_experiment_tracking(
         version="9",
     )
 
-    metadata_collector.collect.return_value = metadata
+    mock_metadata_collector.collect.return_value = metadata
 
     trainer = Trainer(
         dataset=mock_dataset,
         evaluator=mock_evaluator,
-        tracker=tracker,
-        metadata_collector=metadata_collector,
+        tracker=mock_tracker,
+        metadata_collector=mock_metadata_collector,
         registry=registry,
         config=training_config,
     )
     trainer.train()
 
-    tracker.start_run.assert_called_once_with(settings.mlflow_run_name)
-    metadata_collector.collect.assert_called_once_with()
-    tracker.log_metadata.assert_called_once_with(metadata)
-    tracker.log_parameters.assert_called_once()
-    tracker.log_metrics.assert_called_once()
-    tracker.log_model.assert_called_once()
-    tracker.end_run.assert_called_once()
+    mock_tracker.start_run.assert_called_once_with(settings.mlflow_run_name)
+    mock_metadata_collector.collect.assert_called_once_with()
+    mock_tracker.log_metadata.assert_called_once_with(metadata)
+    mock_tracker.log_parameters.assert_called_once()
+    mock_tracker.log_metrics.assert_called_once()
+    mock_tracker.log_model.assert_called_once()
+    mock_tracker.end_run.assert_called_once()
 
     registry.register_model.assert_called_once_with(
         name=settings.mlflow_model_name,
