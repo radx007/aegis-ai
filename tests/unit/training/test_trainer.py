@@ -163,6 +163,11 @@ def test_train_uses_injected_configuration(
 
     mock_tracker.start_run.assert_called_once_with("custom-run")
 
+    mock_dataset.split.assert_called_once_with(
+        test_size=0.2,
+        random_state=99,
+    )
+
     registry.register_model.assert_called_once_with(
         name="custom-model",
     )
