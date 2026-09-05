@@ -9,13 +9,13 @@ from src.config import settings
 from src.embeddings import EmbeddingModel
 from src.inference import Predictor
 from src.mlops.loading import ModelLoader
-from src.mlops.registry import ModelRegistry
 
 pytestmark = pytest.mark.integration
 
 
 def test_prediction_pipeline(
     tmp_path: Path,
+    registry: Mock,
 ) -> None:
     # Arrange
     X, y = make_classification(
@@ -32,7 +32,6 @@ def test_prediction_pipeline(
     )
     model.fit(X, y)
 
-    registry = Mock(spec=ModelRegistry)
     loader = Mock(spec=ModelLoader)
 
     registered_model = Mock()
