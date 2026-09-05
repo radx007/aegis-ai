@@ -5,7 +5,8 @@ import pytest
 from sklearn.datasets import make_classification
 from typer.testing import CliRunner
 
-from src.cli.app import app
+from src.cli import app
+from src.config import settings
 
 runner = CliRunner()
 
@@ -14,8 +15,17 @@ pytestmark = pytest.mark.e2e
 
 def test_train_command(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     # Arrange
+    tracking_uri = f"sqlite:///{(tmp_path / 'mlflow.db').resolve().as_posix()}"
+
+    monkeypatch.setattr(
+        settings,
+        "mlflow_tracking_uri",
+        tracking_uri,
+    )
+
     X, y = make_classification(
         n_samples=50,
         n_features=1024,

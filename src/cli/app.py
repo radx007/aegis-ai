@@ -1,8 +1,9 @@
 import typer
 
-from src.cli.predict import predict_command
-from src.cli.train import train_command
 from src.mlops.bootstrap import configure_mlflow
+
+from .predict import predict_command
+from .train import train_command
 
 app = typer.Typer(
     help="AEGIS AI command line interface.",

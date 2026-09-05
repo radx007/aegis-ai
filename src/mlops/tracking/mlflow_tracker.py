@@ -4,7 +4,7 @@ from typing import Any
 import mlflow
 from sklearn.base import ClassifierMixin
 
-from src.entities.experiment_metadata import ExperimentMetadata
+from src.entities import ExperimentMetadata
 
 from .base import ExperimentTracker
 

@@ -5,7 +5,7 @@ import pytest
 
 from src.config import settings
 from src.dataset import Dataset
-from src.exceptions.dataset import DatasetError
+from src.exceptions import DatasetError
 
 pytestmark = pytest.mark.unit
 
@@ -44,6 +44,7 @@ def test_load_raises_dataset_error() -> None:
 
 
 def test_split_returns_four_arrays(monkeypatch: pytest.MonkeyPatch) -> None:
+    rng = np.random.default_rng(42)
 
     dataset = Dataset(settings.processed_data_path)
 
@@ -52,7 +53,7 @@ def test_split_returns_four_arrays(monkeypatch: pytest.MonkeyPatch) -> None:
         "load",
         Mock(
             return_value=(
-                np.random.rand(20, 1024),
+                rng.random((20, 1024)),
                 np.array([0] * 20),
             )
         ),

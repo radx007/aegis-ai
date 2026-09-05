@@ -27,7 +27,6 @@ def test_register_model() -> None:
             "src.mlops.registry.mlflow_registry.mlflow.register_model",
             return_value=registered_version,
         ) as register_model,
-        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
     ):
         result = registry.register_model(
             name=settings.mlflow_model_name,
@@ -50,7 +49,6 @@ def test_register_model_raises_when_no_active_run() -> None:
             "src.mlops.registry.mlflow_registry.mlflow.active_run",
             return_value=None,
         ),
-        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
         pytest.raises(
             RuntimeError,
             match="An active MLflow run is required to register a model.",
@@ -66,13 +64,10 @@ def test_promote_model() -> None:
 
     mock_client_instance = Mock()
 
-    with (
-        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
-        patch(
-            "src.mlops.registry.mlflow_registry.mlflow.MlflowClient",
-            return_value=mock_client_instance,
-        ) as mock_client_cls,
-    ):
+    with patch(
+        "src.mlops.registry.mlflow_registry.mlflow.MlflowClient",
+        return_value=mock_client_instance,
+    ) as mock_client_cls:
         registry.promote(
             name=settings.mlflow_model_name,
             version="8",
@@ -80,6 +75,7 @@ def test_promote_model() -> None:
         )
 
     mock_client_cls.assert_called_once_with()
+
     mock_client_instance.set_registered_model_alias.assert_called_once_with(
         name=settings.mlflow_model_name,
         alias=settings.mlflow_model_alias,
@@ -98,12 +94,9 @@ def test_get_model_by_alias() -> None:
 
     client.get_model_version_by_alias.return_value = model_version
 
-    with (
-        patch("src.mlops.registry.mlflow_registry.mlflow.set_tracking_uri"),
-        patch(
-            "src.mlops.registry.mlflow_registry.mlflow.MlflowClient",
-            return_value=client,
-        ),
+    with patch(
+        "src.mlops.registry.mlflow_registry.mlflow.MlflowClient",
+        return_value=client,
     ):
         result = registry.get_model_by_alias(
             name=settings.mlflow_model_name,

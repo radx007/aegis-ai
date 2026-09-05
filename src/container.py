@@ -10,7 +10,7 @@ from src.embeddings import (
     YamnetEmbeddingExtractor,
 )
 from src.evaluation import Evaluator
-from src.exceptions.model_loading import ModelLoadingError
+from src.exceptions import ModelLoadingError
 from src.inference import Predictor
 from src.mlops.loading import (
     MLflowModelLoader,
@@ -27,8 +27,7 @@ from src.mlops.tracking import (
     MLflowTracker,
     NullTracker,
 )
-from src.training import Trainer
-from src.training.config import TrainingConfig
+from src.training import Trainer, TrainingConfig
 
 
 class Container:

@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 
 from src.container import Container
-from src.exceptions.model_loading import ModelLoadingError
+from src.exceptions import ModelLoadingError
 from src.mlops.registry import (
     MLflowModelRegistry,
     NullModelRegistry,

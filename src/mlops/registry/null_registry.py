@@ -1,4 +1,4 @@
-from src.entities.registered_model import RegisteredModelVersion
+from src.entities import RegisteredModelVersion
 
 from .base import ModelRegistry
 

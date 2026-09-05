@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from src.config import settings
-from src.entities.experiment_metadata import ExperimentMetadata
+from src.entities import ExperimentMetadata
 from src.mlops.tracking import MLflowTracker
 
 pytestmark = pytest.mark.unit
@@ -57,7 +57,7 @@ def test_log_parameters() -> None:
 
 
 def test_log_metrics() -> None:
-    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name )
+    tracker = MLflowTracker(experiment_name=settings.mlflow_experiment_name)
 
     metrics = {
         "accuracy": 1.0,

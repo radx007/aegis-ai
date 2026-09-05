@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from sklearn.base import ClassifierMixin
 
-from src.entities.registered_model import RegisteredModelVersion
+from src.entities import RegisteredModelVersion
 
 
 class ModelLoader(ABC):

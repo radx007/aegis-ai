@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from src.config import settings
-from src.entities.registered_model import RegisteredModelVersion
+from src.entities import RegisteredModelVersion
 from src.mlops.loading import MLflowModelLoader
 
 pytestmark = pytest.mark.unit
@@ -19,13 +19,10 @@ def test_load_model() -> None:
 
     loaded_model = Mock()
 
-    with (
-        patch("src.mlops.loading.mlflow_loader.mlflow.set_tracking_uri"),
-        patch(
-            "src.mlops.loading.mlflow_loader.mlflow.sklearn.load_model",
-            return_value=loaded_model,
-        ) as load_model,
-    ):
+    with patch(
+        "src.mlops.loading.mlflow_loader.mlflow.sklearn.load_model",
+        return_value=loaded_model,
+    ) as load_model:
         result = loader.load(model)
 
     load_model.assert_called_once_with(

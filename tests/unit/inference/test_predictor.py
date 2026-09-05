@@ -4,7 +4,7 @@ from unittest.mock import Mock
 import pytest
 
 from src.entities import PredictionResult
-from src.exceptions.prediction import PredictionError
+from src.exceptions import PredictionError
 from src.inference import Predictor
 
 pytestmark = pytest.mark.unit
