@@ -4,7 +4,7 @@ from typing import Any
 
 from sklearn.base import ClassifierMixin
 
-from src.entities.experiment_metadata import ExperimentMetadata
+from src.entities import ExperimentMetadata
 
 
 class ExperimentTracker(ABC):

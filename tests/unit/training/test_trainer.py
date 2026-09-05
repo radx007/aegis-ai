@@ -4,12 +4,9 @@ from unittest.mock import Mock
 import pytest
 
 from src.config import settings
-from src.entities import TrainingResult
-from src.entities.experiment_metadata import ExperimentMetadata
-from src.entities.registered_model import RegisteredModelVersion
-from src.exceptions.training import TrainingError
-from src.training import Trainer
-from src.training.config import TrainingConfig
+from src.entities import ExperimentMetadata, RegisteredModelVersion, TrainingResult
+from src.exceptions import TrainingError
+from src.training import Trainer, TrainingConfig
 
 pytestmark = pytest.mark.unit
 

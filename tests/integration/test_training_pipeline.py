@@ -7,10 +7,9 @@ from sklearn.datasets import make_classification
 
 from src.config import settings
 from src.dataset import Dataset
-from src.entities.registered_model import RegisteredModelVersion
+from src.entities import RegisteredModelVersion
 from src.evaluation import Evaluator
-from src.training import Trainer
-from src.training.config import TrainingConfig
+from src.training import Trainer, TrainingConfig
 
 pytestmark = pytest.mark.integration
 

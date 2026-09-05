@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from src.embeddings import YamnetEmbeddingExtractor
-from src.exceptions.embedding import EmbeddingError
+from src.exceptions import EmbeddingError
 
 pytestmark = pytest.mark.unit
 

@@ -5,7 +5,7 @@ import pytest
 from sklearn.datasets import make_classification
 from typer.testing import CliRunner
 
-from src.cli.app import app
+from src.cli import app
 from src.config import settings
 from src.mlops.registry import MLflowModelRegistry
 

@@ -8,7 +8,7 @@ from src.logging import logger
 from src.mlops.metadata import MetadataCollector
 from src.mlops.registry import ModelRegistry
 from src.mlops.tracking import ExperimentTracker
-from src.training.config import TrainingConfig
+from src.training import TrainingConfig
 
 
 class Trainer:

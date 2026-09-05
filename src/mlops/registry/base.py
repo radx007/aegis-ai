@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.entities.registered_model import RegisteredModelVersion
+from src.entities import RegisteredModelVersion
 
 
 class ModelRegistry(ABC):

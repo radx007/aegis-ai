@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from src.config import settings
-from src.entities.experiment_metadata import ExperimentMetadata
+from src.entities import ExperimentMetadata
 from src.mlops.tracking import MLflowTracker
 
 pytestmark = pytest.mark.unit

@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from src.config import settings
-from src.entities.registered_model import RegisteredModelVersion
+from src.entities import RegisteredModelVersion
 from src.mlops.loading import MLflowModelLoader
 
 pytestmark = pytest.mark.unit

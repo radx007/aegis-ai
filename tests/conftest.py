@@ -4,13 +4,12 @@ import numpy as np
 import pytest
 
 from src.embeddings import EmbeddingModel
-from src.entities.metrics import EvaluationMetrics
+from src.entities import EvaluationMetrics
 from src.evaluation import Evaluator
-from src.exceptions.prediction import PredictionError
-from src.mlops.metadata.collector import MetadataCollector
-from src.mlops.tracking.base import ExperimentTracker
-from src.mlops.tracking.null_tracker import NullTracker
-from src.training.config import TrainingConfig
+from src.exceptions import PredictionError
+from src.mlops.metadata import MetadataCollector
+from src.mlops.tracking import ExperimentTracker, NullTracker
+from src.training import TrainingConfig
 
 
 @pytest.fixture

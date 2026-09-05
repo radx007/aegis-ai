@@ -5,7 +5,7 @@ import pytest
 
 from src.config import settings
 from src.dataset import Dataset
-from src.exceptions.dataset import DatasetError
+from src.exceptions import DatasetError
 
 pytestmark = pytest.mark.unit
 

@@ -7,7 +7,7 @@ import logging
 
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
-from src.cli.app import app  # noqa: E402
+from src.cli import app  # noqa: E402
 
 
 def main() -> None:

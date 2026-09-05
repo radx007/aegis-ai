@@ -1,6 +1,6 @@
 import pytest
 
-from src.entities.experiment_metadata import ExperimentMetadata
+from src.entities import ExperimentMetadata
 from src.mlops.metadata import MetadataCollector
 
 pytestmark = pytest.mark.unit
