@@ -171,3 +171,11 @@ def test_train_uses_injected_configuration(
     registry.register_model.assert_called_once_with(
         name="custom-model",
     )
+
+    registered_model = registry.register_model.return_value
+
+    registry.promote.assert_called_once_with(
+        name=registered_model.name,
+        version=registered_model.version,
+        alias="candidate",
+    )
