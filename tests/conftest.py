@@ -8,6 +8,7 @@ from src.entities import EvaluationMetrics
 from src.evaluation import Evaluator
 from src.exceptions import PredictionError
 from src.mlops.metadata import MetadataCollector
+from src.mlops.registry import ModelRegistry
 from src.mlops.tracking import ExperimentTracker, NullTracker
 from src.training import TrainingConfig
 
@@ -129,8 +130,6 @@ def metadata_collector() -> MetadataCollector:
 
 @pytest.fixture
 def registry() -> Mock:
-    from src.mlops.registry import ModelRegistry
-
     return Mock(spec=ModelRegistry)
 
 
