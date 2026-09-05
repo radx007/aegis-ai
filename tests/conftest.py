@@ -29,18 +29,23 @@ def y_pred() -> np.ndarray:
 
 @pytest.fixture
 def dummy_features() -> np.ndarray:
-    return np.random.rand(4, 1024)
+    rng = np.random.default_rng(42)
+
+    return rng.random((4, 1024))
 
 
 @pytest.fixture
 def mock_dataset() -> Mock:
+    rng = np.random.default_rng(42)
+
     mock = Mock()
     mock.split.return_value = (
-        np.random.rand(10, 1024),
-        np.random.rand(2, 1024),
+        rng.random((10, 1024)),
+        rng.random((2, 1024)),
         np.array([0, 1] * 5),
         np.array([0, 1]),
     )
+
     return mock
 
 
@@ -59,13 +64,13 @@ def mock_evaluator() -> Mock:
 
 @pytest.fixture
 def mock_extractor() -> Mock:
+    rng = np.random.default_rng(42)
+
     mock = Mock(
         spec=EmbeddingModel,
     )
 
-    mock.extract.return_value = np.random.rand(
-        1024,
-    )
+    mock.extract.return_value = rng.random(1024)
 
     return mock
 
@@ -98,7 +103,9 @@ def mock_model_failure() -> Mock:
 
 @pytest.fixture
 def fake_audio() -> tuple[np.ndarray, int]:
-    return np.random.rand(16000), 16000
+    rng = np.random.default_rng(42)
+
+    return rng.random(16000), 16000
 
 
 @pytest.fixture
